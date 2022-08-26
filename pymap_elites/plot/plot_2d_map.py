@@ -44,6 +44,7 @@ import sys
 from matplotlib.ticker import FuncFormatter
 from sklearn.neighbors import KDTree
 import matplotlib.cm as cm
+import pickle
 
 my_cmap = cm.viridis
 
@@ -132,12 +133,12 @@ def voronoi_finite_polygons_2d(vor, radius=None):
     return new_regions, np.asarray(new_vertices)
 
 
-def load_data(filename, dim,dim_x):
+def load_data(filename, genomes, dim,dim_x):
     print("Loading ",filename)
     data = np.loadtxt(filename)
     fit = data[:, 0:1]
     desc = data[:,1: dim+1]
-    x = data[:,dim+1:dim+1+dim_x]
+    x = genomes
 
     return fit, desc, x
 
@@ -177,12 +178,15 @@ def plot_cvt(ax, centroids, fit, desc, x,dim1,dim2, min_fit, max_fit):
     sc = ax.scatter(desc[:,0], desc[:,1], c=fit_reshaped, cmap=my_cmap, s=10, zorder=0)
 
 if __name__ == "__main__":
-    if len(sys.argv) < 3:
-        sys.exit('Usage: %s centroids_file archive.dat [min_fit] [max_fit]' % sys.argv[0])
+    # if len(sys.argv) < 3:
+    #     sys.exit('Usage: %s centroids_file archive.dat [min_fit] [max_fit]' % sys.argv[0])
+    filename = r'C:\Users\micha\PycharmProjects\Honours Project\mapElitesOutput\NEAT\0_20000archive\archive_genome8011476.pkl'
+    with open(filename, 'rb') as f:
+        genomes = pickle.load(f)
 
-    centroids = load_centroids(sys.argv[1])
+    centroids = load_centroids(r'C:\Users\micha\PycharmProjects\Honours Project\centroids\centroids_20000_6.dat')
     dim_x = 24
-    fit, beh, x = load_data(sys.argv[2], centroids.shape[1], dim_x)
+    fit, beh, x = load_data(r'C:\Users\micha\PycharmProjects\Honours Project\mapElitesOutput\NEAT\0_20000archive\archive8011476.dat', genomes, centroids.shape[1], dim_x)
     print("Fitness max : ", max(fit))
     index = np.argmax(fit)
     print("Average fit:", fit.sum() / fit.shape[0])
