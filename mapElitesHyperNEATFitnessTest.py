@@ -81,12 +81,12 @@ CONFIG = neat.config.Config(neat.genome.DefaultGenome, neat.reproduction.Default
                             neat.species.DefaultSpeciesSet, neat.stagnation.DefaultStagnation,
                             'NEATHex/config-cppn')
 
-filename = 'mapElitesOutput/HyperNEAT/10_20000archive/archive_genome5158.pkl'
+filename = r"C:\Users\micha\PycharmProjects\Honours Project\mapElitesOutput\HyperNEAT\1_20000archive\archive_genome8011438.pkl"
 # filename = 'NEATOutput/bestGenomes/NEATGenome0.pkl'
 with open(filename, 'rb') as f:
     genomes = pickle.load(f)
 
-test = genomes[304]
+test = genomes[2630]
 print(evaluate_gait(test))
 CPPN = neat.nn.FeedForwardNetwork.create(test, CONFIG)
 

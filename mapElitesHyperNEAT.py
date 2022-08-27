@@ -84,7 +84,7 @@ CONFIG = neat.config.Config(neat.genome.DefaultGenome, neat.reproduction.Default
 
 def load_genomes():
     genomes = []
-    for i in range(20):
+    for i in range(1):
         filename = 'HyperNEATOutput/stats/hyperNEATStats' + str(i) + '.pkl'
         with open(filename, 'rb') as f:
             stats = pickle.load(f)
@@ -96,7 +96,7 @@ def load_genomes():
 if __name__ == '__main__':
     mapSize = int(sys.argv[1])
     runNum = (sys.argv[2])
-    genomes = load_genomes()
+    # genomes = load_genomes()
     params = \
         {
             # more of this -> higher-quality CVT
@@ -117,11 +117,18 @@ if __name__ == '__main__':
             "min": 0,
             "max": 1,
         }
+
+    filename = 'mapElitesOutput/HyperNEAT/'+ runNum+'_20000archive/archive_genome7010028.pkl'
+    archive_load_file_name = 'mapElitesOutput/HyperNEAT/'+runNum+'_20000archive/archive7010028.dat'
+    with open(filename, 'rb') as f:
+        genomes = pickle.load(f)
+        print(len(genomes))
+
     if not os.path.exists("mapElitesOutput/HyperNEAT/" + runNum + "_" + str(mapSize)):
         os.mkdir("mapElitesOutput/HyperNEAT/" + runNum + "_" + str(mapSize))
     if not os.path.exists("mapElitesOutput/HyperNEAT/" + runNum + "_" + str(mapSize) + "archive"):
         os.mkdir("mapElitesOutput/HyperNEAT/" + runNum + "_" + str(mapSize) + "archive")
-
-    archive = cvt_map_elites.compute(6, genomes, evaluate_gait, n_niches=mapSize, max_evals=12e6,
-                                     log_file=open('mapElitesOutput/HyperNEAT/' + runNum + "_" + str(mapSize) + '/log.dat', 'w'), archive_file='mapElitesOutput/HyperNEAT/' + runNum + "_" + str(mapSize) + "archive" + '/archive', params=params,
+    archive = cvt_map_elites.compute(6, genomes, evaluate_gait, n_niches=mapSize, max_evals=8e6,
+                                     log_file=open('mapElitesOutput/HyperNEAT/' + runNum + "_" + str(mapSize) + '/log.dat', 'a'), archive_file='mapElitesOutput/HyperNEAT/' + runNum + "_" + str(mapSize) + "archive" + '/archive',
+                                     archive_load_file=archive_load_file_name, params=params, start_index=7010028,
                                      variation_operator=cm.neatMutation)

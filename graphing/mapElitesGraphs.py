@@ -6,6 +6,11 @@ import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 import pandas as pd
 from io import StringIO
+import webbrowser
+from tempfile import NamedTemporaryFile
+
+
+
 
 def progression_metrics():
     dfMain = pd.read_csv(rf'C:\Users\micha\PycharmProjects\Honours Project\mapElitesOutput\NEAT\0_20000\log.dat',
@@ -29,6 +34,9 @@ def progression_metrics():
     dfMainBestLineAverage.insert(5, 'Highest Average NEAT 20k', dfMainBestLineAverage.max(axis=1), True)
     dfMainBestLineAverage.insert(5, 'Lowest Average NEAT 20k', dfMainBestLineAverage.min(axis=1), True)
     dfMain = dfMain / 5
+
+
+
     dfMain.reset_index()
     # print(dfMainBestLine)
     # print(dfMainBestLineAverage)
