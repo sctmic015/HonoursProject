@@ -81,12 +81,12 @@ CONFIG = neat.config.Config(neat.genome.DefaultGenome, neat.reproduction.Default
                             neat.species.DefaultSpeciesSet, neat.stagnation.DefaultStagnation,
                             'NEATHex/config-cppn')
 
-filename = r"C:\Users\micha\PycharmProjects\Honours Project\mapElitesOutput\HyperNEAT\1_20000archive\archive_genome8011438.pkl"
+filename = r"C:\Users\micha\PycharmProjects\Honours Project\mapElitesOutput\HyperNEAT\1_40000archive\archive_genome8001878.pkl"
 # filename = 'NEATOutput/bestGenomes/NEATGenome0.pkl'
 with open(filename, 'rb') as f:
     genomes = pickle.load(f)
 
-test = genomes[2630]
+test = genomes[9]
 print(evaluate_gait(test))
 CPPN = neat.nn.FeedForwardNetwork.create(test, CONFIG)
 
@@ -97,7 +97,7 @@ WINNER_NET = create_phenotype_network(CPPN, SUBSTRATE)
 
 # Create and run controller
 controller = Controller(tripod_gait, body_height=0.15, velocity=0.5, crab_angle=-np.pi / 6, ann=WINNER_NET, activations=ACTIVATIONS)
-simulator = Simulator(controller, follow=True, visualiser=True, collision_fatal=False, failed_legs=[])
+simulator = Simulator(controller, follow=True, visualiser=True, collision_fatal=False)
 
 
 while True:

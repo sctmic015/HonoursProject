@@ -6,6 +6,7 @@ from adapt.MBOA import MBOA
 import numpy as np
 import pickle
 import neat
+import sys
 
 INPUT_COORDINATES = [(0.2, 0.5), (0.4, 0.5), (0.6, 0.5),
                      (0.2, 0), (0.4, 0), (0.6, 0),
@@ -44,25 +45,25 @@ maps20File = ["mapElitesOutput/HyperNEAT/0_20000archive/archive8011438.dat",
               "mapElitesOutput/HyperNEAT/3_20000archive/archive8001878.dat",
               "mapElitesOutput/HyperNEAT/4_20000archive/archive8011438.dat"]
 
-maps40File = ["mapElitesOutput/HyperNEAT/0_40000archive/archive8011438.dat",
-              "mapElitesOutput/HyperNEAT/1_40000archive/archive8011438.dat",
-              "mapElitesOutput/HyperNEAT/2_40000archive/archive8011438.dat",
-              "mapElitesOutput/HyperNEAT/3_40000archive/archive8011438.dat",
-              "mapElitesOutput/HyperNEAT/4_40000archive/archive8011438.dat"]
-
 maps20Genome = ["mapElitesOutput/HyperNEAT/0_20000archive/archive_genome8011438.pkl",
                 "mapElitesOutput/HyperNEAT/1_20000archive/archive_genome8011438.pkl",
                 "mapElitesOutput/HyperNEAT/2_20000archive/archive_genome8001878.pkl",
                 "mapElitesOutput/HyperNEAT/3_20000archive/archive_genome8001878.pkl",
                 "mapElitesOutput/HyperNEAT/4_20000archive/archive_genome8011438.pkl"]
 
-maps40Genome = ["mapElitesOutput/HyperNEAT/0_40000archive/archive_genome8011438.pkl",
-                "mapElitesOutput/HyperNEAT/1_40000archive/archive_genome8011438.pkl",
-                "mapElitesOutput/HyperNEAT/2_40000archive/archive_genome8011438.pkl",
-                "mapElitesOutput/HyperNEAT/3_40000archive/archive_genome8011438.pkl",
-                "mapElitesOutput/HyperNEAT/4_40000archive/archive_genome8011438.pkl"]
+maps40File = ["mapElitesOutput/HyperNEAT/0_40000archive/archive8001878.dat",
+              "mapElitesOutput/HyperNEAT/1_40000archive/archive8001878.dat",
+              "mapElitesOutput/HyperNEAT/2_40000archive/archive8001878.dat",
+              "mapElitesOutput/HyperNEAT/3_40000archive/archive8011438.dat",
+              "mapElitesOutput/HyperNEAT/4_40000archive/archive8001878.dat"]
 
-mapType = False  # False for 20k maps, True for 40k maps
+maps40Genome = ["mapElitesOutput/HyperNEAT/0_40000archive/archive_genome8001878.pkl",
+                "mapElitesOutput/HyperNEAT/1_40000archive/archive_genome8001878.pkl",
+                "mapElitesOutput/HyperNEAT/2_40000archive/archive_genome8001878.pkl",
+                "mapElitesOutput/HyperNEAT/3_40000archive/archive_genome8011438.pkl",
+                "mapElitesOutput/HyperNEAT/4_40000archive/archive_genome8001878.pkl"]
+
+mapType = True  # False for 20k maps, True for 40k maps
 map_count = 5
 mapsFile = ''
 if mapType == False:
@@ -73,7 +74,7 @@ else:
     niches = 40000
     mapsFile = maps40File
     mapsGenome = maps40Genome
-failure_scenario = 4
+failure_scenario = int(sys.argv[1])
 
 S0 = [[]]
 S1 = [[1], [2], [3], [4], [5], [6]]

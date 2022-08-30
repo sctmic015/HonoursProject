@@ -91,13 +91,6 @@ class Controller:
         input_angles = np.append(input_angles, coswave)
         current_angles = self.ann.activate(input_angles)
         for i in range(len(current_angles)):
-            if (current_angles[i] > 1):
-                print("You're fucked")
-                sys.exit()
-            if (current_angles[i] < 0):
-                print("You're fucked")
-                sys.exit()
-        for i in range(len(current_angles)):
             if i % 3 == 0:
                 current_angles[i] = (current_angles[i] * 0.91 * 2) - 0.91
             elif i % 3 == 1:

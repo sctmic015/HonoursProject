@@ -16,39 +16,65 @@ config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
 
 def average_fitness():
     start_time = time.time()
-    dfMain = pd.read_csv(r'C:\Users\micha\PycharmProjects\neat-python\NEATOutput\genomeFitness\NEATFitnessHistory0.csv')
+    dfMain = pd.read_csv(r'C:\Users\micha\PycharmProjects\Honours Project\NEATOutput\genomeFitness\NEATFitnessHistory0.csv')
     dfMain.columns = ['Best NEAT', 'Average NEAT']
+    dfMain['Lowest NEAT'] = dfMain['Best NEAT']
+    dfMain['Highest NEAT'] = dfMain['Best NEAT']
+    dfMainLowestHighest = pd.DataFrame(columns=['Lowest NEAT', 'Highest NEAT', 'NEAT current'])
+    dfMainLowestHighest['Lowest NEAT'] = dfMain['Best NEAT']
+    dfMainLowestHighest['Highest NEAT'] = dfMain['Best NEAT']
     for i in range(1, 20):
-        filename = r'C:\Users\micha\PycharmProjects\neat-python\NEATOutput\genomeFitness\NEATFitnessHistory' + str(i) + '.csv'
+        filename = r'C:\Users\micha\PycharmProjects\Honours Project\NEATOutput\genomeFitness\NEATFitnessHistory' + str(i) + '.csv'
         df = pd.read_csv(filename)
         df.columns = ['Best NEAT', 'Average NEAT']
         dfMain['Best NEAT'] = dfMain['Best NEAT'] + df['Best NEAT']
         dfMain['Average NEAT'] = dfMain['Average NEAT'] + df['Average NEAT']
+        dfMainLowestHighest['NEAT current'] = df['Best NEAT']
+        dfMainLowestHighest['Highest NEAT'] = dfMainLowestHighest.max(axis=1)
+        dfMainLowestHighest['Lowest NEAT'] = dfMainLowestHighest.min(axis=1)
     dfMain['Best NEAT'] = dfMain['Best NEAT'] / 20
     dfMain['Average NEAT'] = dfMain['Average NEAT'] /20
     dfMain.reset_index()
 
     dfMain2 = pd.read_csv(
-        r'C:\Users\micha\PycharmProjects\neat-python\HyperNEATOutput\\genomeFitness\HyperNEATFitnessHistory0.csv')
+        r'C:\Users\micha\PycharmProjects\Honours Project\HyperNEATOutput\genomeFitness\HyperNEATFitnessHistory0.csv')
     dfMain2.columns = ['Best HyperNEAT', 'Average HyperNEAT']
+    dfMain2LowestHighest = pd.DataFrame(columns=['Lowest HyperNEAT', 'Highest HyperNEAT', 'HyperNEAT current'])
+    dfMain2LowestHighest['Lowest HyperNEAT'] = dfMain2['Best HyperNEAT']
+    dfMain2LowestHighest['Highest HyperNEAT'] = dfMain2['Best HyperNEAT']
     for i in range(1, 20):
-        filename = r'C:\Users\micha\PycharmProjects\neat-python\HyperNEATOutput\genomeFitness\HyperNEATFitnessHistory' + str(
+        filename = r'C:\Users\micha\PycharmProjects\Honours Project\HyperNEATOutput\genomeFitness\HyperNEATFitnessHistory' + str(
             i) + '.csv'
         df = pd.read_csv(filename)
         df.columns = ['Best HyperNEAT', 'Average HyperNEAT']
         dfMain2['Best HyperNEAT'] = dfMain2['Best HyperNEAT'] + df['Best HyperNEAT']
         dfMain2['Average HyperNEAT'] = dfMain2['Average HyperNEAT'] + df['Average HyperNEAT']
+        dfMain2LowestHighest['HyperNEAT current'] = df['Best HyperNEAT']
+        dfMain2LowestHighest['Highest HyperNEAT'] = dfMain2LowestHighest.max(axis=1)
+        dfMain2LowestHighest['Lowest HyperNEAT'] = dfMain2LowestHighest.min(axis=1)
     dfMain2['Best HyperNEAT'] = dfMain2['Best HyperNEAT'] / 20
     dfMain2['Average HyperNEAT'] = dfMain2['Average HyperNEAT'] / 20
     dfMain2.reset_index()
 
-    dfMain = dfMain.append(dfMain2)
-    lines = dfMain.plot.line()
+    dfMain = pd.concat([dfMain, dfMain2], axis=1)
+    plt.plot(dfMain.index, dfMain['Best NEAT'])
+    plt.fill_between(dfMain.index, dfMainLowestHighest['Lowest NEAT'], dfMainLowestHighest['Highest NEAT'], alpha = 0.2)
+    plt.plot(dfMain.index, dfMain['Best HyperNEAT'])
+    plt.fill_between(dfMain.index, dfMain2LowestHighest['Lowest HyperNEAT'], dfMain2LowestHighest['Highest HyperNEAT'], alpha=0.2)
+    plt.plot(dfMain.index, dfMain['Average NEAT'])
+    plt.plot(dfMain.index, dfMain['Average HyperNEAT'])
+    plt.title("Fitness NEAT vs HyperNEAT")
+    plt.legend(['Best NEAT', 'Best HyperNEAT', 'Average NEAT', 'Average HyperNEAT'], loc = 'upper left')
     plt.xlabel("Number of Generations")
-    plt.ylabel("Fitness")
-    plt.savefig("NEATVHyperNEAT")
+    plt.ylabel("Fitness (m)")
     plt.show()
-    plt.close()
+
+    # lines = dfMain.plot.line()
+    # plt.xlabel("Number of Generations")
+    # plt.ylabel("Fitness")
+    # plt.savefig("NEATVHyperNEAT")
+    # plt.show()
+    # plt.close()
 
 def legCoordinationNEAT(NUM_SECONDS, filename):
     with open(filename, 'rb') as f:
@@ -120,6 +146,6 @@ def legCoordinationNEAT(NUM_SECONDS, filename):
 
 
 if __name__ == '__main__':
-    #average_fitness()
+    average_fitness()
     filename = r"C:\Users\micha\PycharmProjects\Honours Project\NEATOutput\bestGenomes\NEATGenome1.pkl"
-    legCoordinationNEAT(NUM_SECONDS=1, filename = filename)
+   # legCoordinationNEAT(NUM_SECONDS=1, filename = filename)
