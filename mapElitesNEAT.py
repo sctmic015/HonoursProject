@@ -2,10 +2,10 @@ import sys
 
 from hexapod.controllers.NEATController import Controller, tripod_gait, reshape, stationary
 from hexapod.simulator import Simulator
-import pymap_elites.map_elites_1.cvt as cvt_map_elites
+import pymap_elites.map_elites.cvt as cvt_map_elites
 import numpy as np
 import neat
-import pymap_elites.map_elites_1.common as cm
+import pymap_elites.map_elites.common as cm
 import pickle
 import os
 

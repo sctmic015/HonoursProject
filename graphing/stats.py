@@ -81,8 +81,6 @@ def evaluate_gaitNEAT(x, duration=5, failed_legs = []):
     # fitness = difference
     # Assign fitness to genome
     x.fitness = fitness
-    if fitness < 0:
-        fitness = 0
     return fitness
 
 
@@ -117,8 +115,6 @@ def evaluate_gaitHyperNEAT(x, duration=5, failed_legs = []):
     # fitness = difference
     # Assign fitness to genome
     x.fitness = fitness
-    if fitness < 0:
-        fitness = 0
     return fitness
 
 
@@ -251,32 +247,34 @@ def MBOAStats():
 
     compDF = pd.DataFrame(columns=['N20N', 'N20H', 'N40N', 'N40H', 'H20N', 'H20H', 'H40N', 'H40H'])
     for i in range(1, 5):
-        print("NEAT20k vs NEAT Reference S" + str(i))
+        #print("NEAT20k vs NEAT Reference S" + str(i))
         NEAT20S = NEAT20SList[i]
-        print(sp.stats.ranksums(NEAT20S,  NEATReferenceResults[i], 'greater'))
+        compDF.loc[i, 'N20N'] = sp.stats.ranksums(NEAT20S,  NEATReferenceResults[i], 'greater')[1]
+        print(type(sp.stats.ranksums(NEAT20S, NEATReferenceResults[i], 'greater')[1]))
         print("NEAT20k vs HyperNEAT Reference S" + str(i))
-        print(sp.stats.ranksums(NEAT20S, HyperNEATReferenceResults[i], 'greater'))
+        compDF.loc[i, 'N20H'] = sp.stats.ranksums(NEAT20S, HyperNEATReferenceResults[i], 'greater')[1]
 
         print("NEAT40k vs NEAT Reference S" + str(i))
         NEAT40S = NEAT40SList[i]
-        print(sp.stats.ranksums(NEAT40S, NEATReferenceResults[i], 'greater'))
+        compDF.loc[i, 'N40N'] = sp.stats.ranksums(NEAT40S, NEATReferenceResults[i], 'greater')[1]
         print("NEAT40k vs Reference S" + str(i))
-        print(sp.stats.ranksums(NEAT40S, HyperNEATReferenceResults[i], 'greater'))
+        compDF.loc[i, 'N40H'] = sp.stats.ranksums(NEAT40S, HyperNEATReferenceResults[i], 'greater')[1]
 
         print("HyperNEAT20k vs NEAT Reference S" + str(i))
         HyperNEAT20S = HyperNEAT20SList[i]
-        print(sp.stats.ranksums(HyperNEAT20S, NEATReferenceResults[i], 'greater'))
+        compDF.loc[i, 'H20N'] = sp.stats.ranksums(HyperNEAT20S, NEATReferenceResults[i], 'greater')[1]
         print("HyperNEAT20k vs HyperNEAT Reference S" + str(i))
-        print(sp.stats.ranksums(HyperNEAT20S, HyperNEATReferenceResults[i], 'greater'))
+        compDF.loc[i, 'H20H'] = sp.stats.ranksums(HyperNEAT20S, HyperNEATReferenceResults[i], 'greater')[1]
 
         print("HyperNEAT40k vs NEAT Reference S" + str(i))
         HyperNEAT40S = HyperNEAT40SList[i]
-        print(sp.stats.ranksums(HyperNEAT40S, NEATReferenceResults[i], 'greater'))
+        compDF.loc[i, 'H40N'] = sp.stats.ranksums(HyperNEAT40S, NEATReferenceResults[i], 'greater')[1]
         print("HyperNEAT40k vs HyperNEAT Reference S" + str(i))
-        print(sp.stats.ranksums(HyperNEAT40S, HyperNEATReferenceResults[i], 'greater'))
+        compDF.loc[i, 'H40H'] = sp.stats.ranksums(HyperNEAT40S, HyperNEATReferenceResults[i], 'greater')[1]
+    compDF.to_csv('MBOA p-values.csv')
 
 
 
-#NEATVHyperNEATStats()
+NEATVHyperNEATStats()
 #mapElitesStats()
-MBOAStats()
+#MBOAStats()

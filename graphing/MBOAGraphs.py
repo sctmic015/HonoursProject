@@ -75,8 +75,6 @@ def evaluate_gaitNEAT(x, duration=5, failed_legs = []):
     # fitness = difference
     # Assign fitness to genome
     x.fitness = fitness
-    if fitness < 0:
-        fitness = 0
     return fitness
 
 
@@ -111,8 +109,6 @@ def evaluate_gaitHyperNEAT(x, duration=5, failed_legs = []):
     # fitness = difference
     # Assign fitness to genome
     x.fitness = fitness
-    if fitness < 0:
-        fitness = 0
     return fitness
 
 def adaptive_performance_plots(tripod_mean_dataNEAT, tripod_mean_dataHyperNEAT):
@@ -205,7 +201,7 @@ def adaptive_performance_plots(tripod_mean_dataNEAT, tripod_mean_dataHyperNEAT):
     plt.xticks(range(0, len(ticks) * 4, 4), ticks)
     plt.xlim(-4, len(ticks) * 4)
     #plt.tight_layout(pad=0.1)
-
+    plt.savefig("Adaption Fitness.png")
     plt.show()
 
 def number_of_adaptations_plot():
@@ -286,7 +282,7 @@ def number_of_adaptations_plot():
     plt.ylim(0, 35)
     #plt.tight_layout(pad=0.1)
 
-    #plt.savefig("../../figures/trials_plot.pdf")
+    plt.savefig("adaptation trials.png")
     plt.show()
 
 if __name__ == '__main__':

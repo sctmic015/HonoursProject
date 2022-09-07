@@ -2,12 +2,12 @@
 #PBS -l select=1:ncpus=24:mpiprocs=24
 #PBS -P CSCI1142
 #PBS -q smp
-#PBS -l walltime=48:00:00
-#PBS -o /mnt/lustre/users/mscott/neat-python/mapHyperNEAT40000_0.out
-#PBS -e /mnt/lustre/users/mscott/neat-python/mapHyperNEAT40000_0.err
+#PBS -l walltime=96:00:00
+#PBS -o /mnt/lustre/users/mscott/neat-python/mapHyperNEAT40000_9.out
+#PBS -e /mnt/lustre/users/mscott/neat-python/mapHyperNEAT40000_9.err
 #PBS -m abe
 #PBS -M sctmic015@myuct.ac.za
-#PBS -N mapElitesHyper40000_0
+#PBS -N mapElitesHyper40000_9
 ulimit -s unlimited
 
 module purge
@@ -18,4 +18,4 @@ nproc=`cat $PBS_NODEFILE | wc -l`
 echo nproc is $nproc
 cat $PBS_NODEFILE
 
-python3 mapElitesHyperNEAT.py 40000 0
+python3 mapElitesHyperNEAT.py 40000 9

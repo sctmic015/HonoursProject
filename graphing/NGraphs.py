@@ -33,7 +33,10 @@ def average_fitness():
         dfMainLowestHighest['Highest NEAT'] = dfMainLowestHighest.max(axis=1)
         dfMainLowestHighest['Lowest NEAT'] = dfMainLowestHighest.min(axis=1)
     dfMain['Best NEAT'] = dfMain['Best NEAT'] / 20
-    dfMain['Average NEAT'] = dfMain['Average NEAT'] /20
+    dfMain['Average NEAT'] = dfMain['Average NEAT'] / 20
+    maximum = dfMain['Best NEAT'].max()
+    dfMain['Best NEAT'] = dfMain['Best NEAT'] / maximum
+    dfMain['Average NEAT'] = dfMain['Average NEAT'] / maximum
     dfMain.reset_index()
 
     dfMain2 = pd.read_csv(
@@ -52,21 +55,23 @@ def average_fitness():
         dfMain2LowestHighest['HyperNEAT current'] = df['Best HyperNEAT']
         dfMain2LowestHighest['Highest HyperNEAT'] = dfMain2LowestHighest.max(axis=1)
         dfMain2LowestHighest['Lowest HyperNEAT'] = dfMain2LowestHighest.min(axis=1)
-    dfMain2['Best HyperNEAT'] = dfMain2['Best HyperNEAT'] / 20
-    dfMain2['Average HyperNEAT'] = dfMain2['Average HyperNEAT'] / 20
+    dfMain2['Best HyperNEAT'] = dfMain2['Best HyperNEAT'] / 20 / maximum
+    dfMain2['Average HyperNEAT'] = dfMain2['Average HyperNEAT'] / 20 / maximum
     dfMain2.reset_index()
 
     dfMain = pd.concat([dfMain, dfMain2], axis=1)
     plt.plot(dfMain.index, dfMain['Best NEAT'])
-    plt.fill_between(dfMain.index, dfMainLowestHighest['Lowest NEAT'], dfMainLowestHighest['Highest NEAT'], alpha = 0.2)
+    #plt.fill_between(dfMain.index, dfMainLowestHighest['Lowest NEAT'], dfMainLowestHighest['Highest NEAT'], alpha = 0.2)
     plt.plot(dfMain.index, dfMain['Best HyperNEAT'])
-    plt.fill_between(dfMain.index, dfMain2LowestHighest['Lowest HyperNEAT'], dfMain2LowestHighest['Highest HyperNEAT'], alpha=0.2)
+    #plt.fill_between(dfMain.index, dfMain2LowestHighest['Lowest HyperNEAT'], dfMain2LowestHighest['Highest HyperNEAT'], alpha=0.2)
     plt.plot(dfMain.index, dfMain['Average NEAT'])
     plt.plot(dfMain.index, dfMain['Average HyperNEAT'])
     plt.title("Fitness NEAT vs HyperNEAT")
     plt.legend(['Best NEAT', 'Best HyperNEAT', 'Average NEAT', 'Average HyperNEAT'], loc = 'upper left')
     plt.xlabel("Number of Generations")
-    plt.ylabel("Fitness (m)")
+    plt.ylabel("Fitness")
+    #plt.ylim([0,1.1])
+    plt.savefig("NEAT v HyperNEAT.png")
     plt.show()
 
     # lines = dfMain.plot.line()

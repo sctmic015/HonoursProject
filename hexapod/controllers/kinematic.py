@@ -80,7 +80,6 @@ class Controller:
 
 	def joint_angles(self, t):
 		k = int(((t % self.period) / self.period) * self.array_dim)
-		print(k)
 		out = self.angles[:, k]
 		if out[0] < self.min0:
 			self.min0 = out[0]
@@ -95,14 +94,8 @@ class Controller:
 		if out[2] > self.max2:
 			self.max2 = out[2]
 
-		if int(k) == 239:
-			print(self.min0)
-			print(self.max0)
-			print(self.min1)
-			print(self.max1)
-			print(self.min2)
-			print(self.max2)
 
+		out[7] = 2
 		return out
 
 

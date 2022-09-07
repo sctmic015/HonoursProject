@@ -15,8 +15,8 @@ from hexapod.simulator import Simulator
 from pureples.hyperneat import create_phenotype_network
 from pureples.shared import Substrate, run_hyper
 from pureples.shared.visualize import draw_net
-import pymap_elites.map_elites_1.common as cm
-import pymap_elites.map_elites_1.cvt as cvt_map_elites
+import pymap_elites.map_elites.common as cm
+import pymap_elites.map_elites.cvt as cvt_map_elites
 
 def evaluate_gait(x, duration=5):
     cppn = neat.nn.FeedForwardNetwork.create(x, CONFIG)

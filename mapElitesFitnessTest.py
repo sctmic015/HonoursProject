@@ -1,9 +1,9 @@
 from hexapod.controllers.NEATController import Controller, tripod_gait, reshape, stationary
 from hexapod.simulator import Simulator
-import pymap_elites.map_elites_1.cvt as cvt_map_elites
+import pymap_elites.map_elites.cvt as cvt_map_elites
 import numpy as np
 import neat
-import pymap_elites.map_elites_1.common as cm
+import pymap_elites.map_elites.common as cm
 import pickle
 import os
 
@@ -11,7 +11,7 @@ config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                      neat.DefaultSpeciesSet, neat.DefaultStagnation,
                      'NEATHex/config-feedforward')
 
-def evaluate_gait(x, duration=5):
+def evaluate_gait(x, failed_legs, duration=5):
     net = neat.nn.FeedForwardNetwork.create(x, config)
     # Reset net
 
@@ -23,7 +23,7 @@ def evaluate_gait(x, duration=5):
     except:
         return 0, np.zeros(6)
     # Initialise Simulator
-    simulator = Simulator(controller=controller, visualiser=False, collision_fatal=True)
+    simulator = Simulator(controller=controller, visualiser=False, collision_fatal=False, failed_legs=failed_legs)
     # Step in simulator
     contact_sequence = np.full((6, 0), False)
     for t in np.arange(0, duration, step=simulator.dt):
@@ -65,21 +65,22 @@ def evaluate_gait_parallel(x, duration=5):
     simulator.terminate()
     return fitness
 
-filename = 'mapElitesOutput/NEAT/archive_genome2003016.pkl'
+filename = 'mapElitesOutput/NEAT/9_20000archive/archive_genome8001916.pkl'
 # filename = 'NEATOutput/bestGenomes/NEATGenome0.pkl'
 with open(filename, 'rb') as f:
     genomes = pickle.load(f)
 
+failed_legs = [1, 4]
 print(len(genomes))
 test = genomes
-test = genomes[8619]
-print(evaluate_gait(test, duration = 5))
+test = genomes[8682]
+print(evaluate_gait(test, duration = 5, failed_legs = failed_legs))
 
 winner_net = neat.nn.FeedForwardNetwork.create(test, config)
 
 controller = Controller(stationary, body_height=0.15, velocity=0.5, crab_angle=-np.pi / 6, ann=winner_net,
                             printangles=True)
-simulator = Simulator(controller, follow=True, visualiser=True, collision_fatal=False, failed_legs=[0])
+simulator = Simulator(controller, follow=True, visualiser=True, collision_fatal=False, failed_legs=failed_legs)
 
 
 while True:

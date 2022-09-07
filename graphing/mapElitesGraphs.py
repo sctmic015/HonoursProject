@@ -23,7 +23,7 @@ def progression_metrics():
     dfMainNEATBestLine['Best NEAT 20k'] = dfMainNEAT['Best NEAT 20k']
     dfMainNEATBestLineAverage = pd.DataFrame(columns=['Average NEAT 20k'])
     dfMainNEATBestLineAverage['Average NEAT 20k'] = dfMainNEAT['Average NEAT 20k']
-    for i in range(1, 5):
+    for i in range(1, 10):
         filename = rf'C:\Users\micha\PycharmProjects\Honours Project\mapElitesOutput\NEAT\{i}_20000\log.dat'
         df = pd.read_csv(filename, header=None, sep='\s', engine='python')
         df.columns = ['Evaluations', 'Niches', 'Best NEAT 20k', 'Average NEAT 20k', 'Median NEAT 20k', '5th percentile',
@@ -32,12 +32,13 @@ def progression_metrics():
         dfMainNEATBestLine.insert(i, 'Best NEAT 20k ' + str(i), df['Best NEAT 20k'], True)
         dfMainNEATBestLineAverage.insert(i, 'Average NEAT 20k' + str(i), df['Average NEAT 20k'], True)
         # dfMainNEATBestLine['Best NEAT 20k ' + str(i)] = df['Best NEAT 20k']
-    dfMainNEATBestLine.insert(5, 'Highest NEAT 20k', dfMainNEATBestLine.max(axis=1), True)
-    dfMainNEATBestLine.insert(5, 'Lowest NEAT 20k', dfMainNEATBestLine.min(axis=1), True)
-    dfMainNEATBestLineAverage.insert(5, 'Highest Average NEAT 20k', dfMainNEATBestLineAverage.max(axis=1), True)
-    dfMainNEATBestLineAverage.insert(5, 'Lowest Average NEAT 20k', dfMainNEATBestLineAverage.min(axis=1), True)
-    dfMainNEAT = dfMainNEAT / 5
+    dfMainNEATBestLine.insert(10, 'Highest NEAT 20k', dfMainNEATBestLine.max(axis=1), True)
+    dfMainNEATBestLine.insert(10, 'Lowest NEAT 20k', dfMainNEATBestLine.min(axis=1), True)
+    dfMainNEATBestLineAverage.insert(10, 'Highest Average NEAT 20k', dfMainNEATBestLineAverage.max(axis=1), True)
+    dfMainNEATBestLineAverage.insert(10, 'Lowest Average NEAT 20k', dfMainNEATBestLineAverage.min(axis=1), True)
+    dfMainNEAT = dfMainNEAT / 10
     dfMainNEAT.reset_index()
+
 
     ## Load in Data HyperNEAT 20k
     dfMainHyperNEAT = pd.read_csv(
@@ -80,7 +81,7 @@ def progression_metrics():
     dfMainNEATBestLine2['Best NEAT 40k'] = dfMainNEAT2['Best NEAT 40k']
     dfMainNEATBestLineAverage2 = pd.DataFrame(columns=['Average NEAT 40k'])
     dfMainNEATBestLineAverage2['Average NEAT 40k'] = dfMainNEAT2['Average NEAT 40k']
-    for i in range(1, 5):
+    for i in range(1, 10):
         filename = rf'C:\Users\micha\PycharmProjects\Honours Project\mapElitesOutput\NEAT\{i}_40000\log.dat'
         df = pd.read_csv(filename, header=None, sep='\s', engine='python')
         df.columns = ['Evaluations', 'Niches', 'Best NEAT 40k', 'Average NEAT 40k', 'Median NEAT 40k', '5th percentile',
@@ -88,11 +89,11 @@ def progression_metrics():
         dfMainNEAT2 = dfMainNEAT2 + df
         dfMainNEATBestLine2.insert(i, 'Best NEAT 40k ' + str(i), df['Best NEAT 40k'], True)
         dfMainNEATBestLineAverage2.insert(i, 'Average NEAT 40k' + str(i), df['Average NEAT 40k'], True)
-    dfMainNEATBestLine2.insert(5, 'Highest NEAT 40k', dfMainNEATBestLine2.max(axis=1), True)
-    dfMainNEATBestLine2.insert(5, 'Lowest NEAT 40k', dfMainNEATBestLine2.min(axis=1), True)
-    dfMainNEATBestLineAverage2.insert(5, 'Highest Average NEAT 40k', dfMainNEATBestLineAverage2.max(axis=1), True)
-    dfMainNEATBestLineAverage2.insert(5, 'Lowest Average NEAT 40k', dfMainNEATBestLineAverage2.min(axis=1), True)
-    dfMainNEAT2 = dfMainNEAT2 / 5
+    dfMainNEATBestLine2.insert(10, 'Highest NEAT 40k', dfMainNEATBestLine2.max(axis=1), True)
+    dfMainNEATBestLine2.insert(10, 'Lowest NEAT 40k', dfMainNEATBestLine2.min(axis=1), True)
+    dfMainNEATBestLineAverage2.insert(10, 'Highest Average NEAT 40k', dfMainNEATBestLineAverage2.max(axis=1), True)
+    dfMainNEATBestLineAverage2.insert(10, 'Lowest Average NEAT 40k', dfMainNEATBestLineAverage2.min(axis=1), True)
+    dfMainNEAT2 = dfMainNEAT2 / 10
     dfMainNEAT2.reset_index()
 
     ## Load in Data for HyperNEAT 40k
@@ -120,22 +121,26 @@ def progression_metrics():
     dfMainHyperNEAT2 = dfMainHyperNEAT2 / 5
     dfMainHyperNEAT2.reset_index()
 
+    ## Find highest fitness to normalise graphs
+    referenceFitness = max(dfMainNEATBestLine.max())
+    print(referenceFitness)
+
     ## Collate Statistics for Best Graph
     dfBest = pd.DataFrame(
         columns=['Evaluations', 'Best NEAT 20k', 'Best NEAT 40k', 'Highest NEAT 40k', 'Lowest NEAT 40k'])
     dfBest['Evaluations'] = dfMainNEAT['Evaluations']
-    dfBest['Best NEAT 20k'] = dfMainNEAT['Best NEAT 20k']
-    dfBest['Best NEAT 40k'] = dfMainNEAT2['Best NEAT 40k']
-    dfBest['Highest NEAT 20k'] = dfMainNEATBestLine['Highest NEAT 20k']
-    dfBest['Lowest NEAT 20k'] = dfMainNEATBestLine['Lowest NEAT 20k']
-    dfBest['Highest NEAT 40k'] = dfMainNEATBestLine2['Highest NEAT 40k']
-    dfBest['Lowest NEAT 40k'] = dfMainNEATBestLine2['Lowest NEAT 40k']
-    dfBest['Best HyperNEAT 20k'] = dfMainHyperNEAT['Best HyperNEAT 20k']
-    dfBest['Best HyperNEAT 40k'] = dfMainHyperNEAT2['Best HyperNEAT 40k']
-    dfBest['Highest HyperNEAT 20k'] = dfMainHyperNEATBestLine['Highest HyperNEAT 20k']
-    dfBest['Lowest HyperNEAT 20k'] = dfMainHyperNEATBestLine['Lowest HyperNEAT 20k']
-    dfBest['Highest HyperNEAT 40k'] = dfMainHyperNEATBestLine2['Highest HyperNEAT 40k']
-    dfBest['Lowest HyperNEAT 40k'] = dfMainHyperNEATBestLine2['Lowest HyperNEAT 40k']
+    dfBest['Best NEAT 20k'] = dfMainNEAT['Best NEAT 20k'] / referenceFitness
+    dfBest['Best NEAT 40k'] = dfMainNEAT2['Best NEAT 40k'] / referenceFitness
+    dfBest['Highest NEAT 20k'] = dfMainNEATBestLine['Highest NEAT 20k'] / referenceFitness
+    dfBest['Lowest NEAT 20k'] = dfMainNEATBestLine['Lowest NEAT 20k'] / referenceFitness
+    dfBest['Highest NEAT 40k'] = dfMainNEATBestLine2['Highest NEAT 40k'] / referenceFitness
+    dfBest['Lowest NEAT 40k'] = dfMainNEATBestLine2['Lowest NEAT 40k'] / referenceFitness
+    dfBest['Best HyperNEAT 20k'] = dfMainHyperNEAT['Best HyperNEAT 20k'] / referenceFitness
+    dfBest['Best HyperNEAT 40k'] = dfMainHyperNEAT2['Best HyperNEAT 40k'] / referenceFitness
+    dfBest['Highest HyperNEAT 20k'] = dfMainHyperNEATBestLine['Highest HyperNEAT 20k'] / referenceFitness
+    dfBest['Lowest HyperNEAT 20k'] = dfMainHyperNEATBestLine['Lowest HyperNEAT 20k'] / referenceFitness
+    dfBest['Highest HyperNEAT 40k'] = dfMainHyperNEATBestLine2['Highest HyperNEAT 40k'] / referenceFitness
+    dfBest['Lowest HyperNEAT 40k'] = dfMainHyperNEATBestLine2['Lowest HyperNEAT 40k'] / referenceFitness
 
     # Plot Best Graph
     plt.plot(dfBest['Evaluations'], dfBest['Best NEAT 20k'])
@@ -147,29 +152,30 @@ def progression_metrics():
                      alpha=0.2)
     plt.plot(dfBest['Evaluations'], dfBest['Best HyperNEAT 40k'])
     plt.fill_between(dfBest['Evaluations'], dfBest['Lowest HyperNEAT 20k'], dfBest['Best HyperNEAT 40k'])
-    plt.ylim(5, 8)
+    #plt.ylim(0, 1)
     plt.title('Best Performance')
-    plt.ylabel('Best Fitness (m)')
+    plt.ylabel('Best Fitness')
     plt.xlabel('Evaluations ($x10^6$)')
     plt.legend(['NEAT 20k', 'NEAT 40k', 'HyperNEAT 20k', 'HyperNEAT40k'])
+    plt.savefig("Maximum Performance.png")
     plt.show()
 
     ## Collate Statistics for Average Graph
     dfAverage = pd.DataFrame(columns=['Evaluations', 'Average NEAT 20k', 'Average NEAT 40k', 'Highest Average NEAT 40k',
                                       'Lowest Average NEAT 40k'])
     dfAverage['Evaluations'] = dfMainNEAT['Evaluations']
-    dfAverage['Average NEAT 20k'] = dfMainNEAT['Average NEAT 20k']
-    dfAverage['Average NEAT 40k'] = dfMainNEAT2['Average NEAT 40k']
-    dfAverage['Highest Average NEAT 20k'] = dfMainNEATBestLineAverage['Highest Average NEAT 20k']
-    dfAverage['Lowest Average NEAT 20k'] = dfMainNEATBestLineAverage['Lowest Average NEAT 20k']
-    dfAverage['Highest Average NEAT 40k'] = dfMainNEATBestLineAverage2['Highest Average NEAT 40k']
-    dfAverage['Lowest Average NEAT 40k'] = dfMainNEATBestLineAverage2['Lowest Average NEAT 40k']
-    dfAverage['Average HyperNEAT 20k'] = dfMainHyperNEAT['Average HyperNEAT 20k']
-    dfAverage['Average HyperNEAT 40k'] = dfMainHyperNEAT2['Average HyperNEAT 40k']
-    dfAverage['Highest Average HyperNEAT 20k'] = dfMainHyperNEATBestLineAverage['Highest Average HyperNEAT 20k']
-    dfAverage['Lowest Average HyperNEAT 20k'] = dfMainHyperNEATBestLineAverage['Lowest Average HyperNEAT 20k']
-    dfAverage['Highest Average HyperNEAT 40k'] = dfMainHyperNEATBestLineAverage2['Highest Average HyperNEAT 40k']
-    dfAverage['Lowest Average HyperNEAT 40k'] = dfMainHyperNEATBestLineAverage2['Lowest Average HyperNEAT 40k']
+    dfAverage['Average NEAT 20k'] = dfMainNEAT['Average NEAT 20k'] / referenceFitness
+    dfAverage['Average NEAT 40k'] = dfMainNEAT2['Average NEAT 40k'] / referenceFitness
+    dfAverage['Highest Average NEAT 20k'] = dfMainNEATBestLineAverage['Highest Average NEAT 20k'] / referenceFitness
+    dfAverage['Lowest Average NEAT 20k'] = dfMainNEATBestLineAverage['Lowest Average NEAT 20k'] / referenceFitness
+    dfAverage['Highest Average NEAT 40k'] = dfMainNEATBestLineAverage2['Highest Average NEAT 40k'] / referenceFitness
+    dfAverage['Lowest Average NEAT 40k'] = dfMainNEATBestLineAverage2['Lowest Average NEAT 40k'] / referenceFitness
+    dfAverage['Average HyperNEAT 20k'] = dfMainHyperNEAT['Average HyperNEAT 20k'] / referenceFitness
+    dfAverage['Average HyperNEAT 40k'] = dfMainHyperNEAT2['Average HyperNEAT 40k'] / referenceFitness
+    dfAverage['Highest Average HyperNEAT 20k'] = dfMainHyperNEATBestLineAverage['Highest Average HyperNEAT 20k'] / referenceFitness
+    dfAverage['Lowest Average HyperNEAT 20k'] = dfMainHyperNEATBestLineAverage['Lowest Average HyperNEAT 20k'] / referenceFitness
+    dfAverage['Highest Average HyperNEAT 40k'] = dfMainHyperNEATBestLineAverage2['Highest Average HyperNEAT 40k'] / referenceFitness
+    dfAverage['Lowest Average HyperNEAT 40k'] = dfMainHyperNEATBestLineAverage2['Lowest Average HyperNEAT 40k'] / referenceFitness
 
     ## Plot Average Graph
     plt.plot(dfAverage['Evaluations'], dfAverage['Average NEAT 20k'])
@@ -185,9 +191,10 @@ def progression_metrics():
     plt.fill_between(dfAverage['Evaluations'], dfAverage['Lowest Average HyperNEAT 40k'],
                      dfAverage['Highest Average HyperNEAT 40k'], alpha=0.3)
     plt.title('Mean performance')
-    plt.ylabel('Average Fitness (m)')
+    plt.ylabel('Average Fitness')
     plt.xlabel('Evaluations ($x10^6$)')
     plt.legend(['NEAT 20k', 'NEAT 40k', 'HyperNEAT 20k', 'HyperNEAT40k'])
+    plt.savefig("Mean Performance.png")
     plt.show()
 
     dfCoverage = pd.DataFrame(columns=['Evaluations', 'Coverage NEAT 20k', 'Coverage NEAT 40k'])
@@ -201,11 +208,12 @@ def progression_metrics():
     plt.ylabel('Coverage (%)')
     plt.xlabel('Evaluations ($x10^6$)')
     plt.legend(['NEAT 20k', 'NEAT 40k', 'HyperNEAT 20k', 'HyperNEAT40k'])
+    plt.savefig('Coverage.png')
     plt.show()
 
 
 def quality_metrics():
-    plt.rcParams['figure.figsize'] = [4,4]
+    plt.rcParams['figure.figsize'] = [4,5]
     plt.rcParams['figure.dpi'] = 100
 
     ## Load all 20k Map Fitness in
@@ -277,13 +285,13 @@ def quality_metrics():
 
 
     ## Set up Performance Plot
-    boxes = [(plt.boxplot(perfromanceNEAT, positions=[0.5], patch_artist=True)),
-             (plt.boxplot(perfromanceNEAT2, positions=[0.9], patch_artist=True)),
-             (plt.boxplot(perfromanceHyperNEAT, positions=[1.35], patch_artist=True)),
-             (plt.boxplot(perfromanceHyperNEAT2, positions=[1.75], patch_artist=True))]
+    boxes = [(plt.boxplot(perfromanceNEAT, positions=[0.3], patch_artist=True)),
+             (plt.boxplot(perfromanceNEAT2, positions=[0.85], patch_artist=True)),
+             (plt.boxplot(perfromanceHyperNEAT, positions=[1.45], patch_artist=True)),
+             (plt.boxplot(perfromanceHyperNEAT2, positions=[2], patch_artist=True))]
 
     # Plot performance
-    colours = [(1, 0, 0, 0.3), (1, 0, 0, 0.3), (0, 1, 0, 0.3), (0, 1, 0, 0.3)]
+    colours = ['tab:orange', 'tab:blue', 'tab:green', 'tab:red']
     count = 0
     for box in boxes:
         for item in ['boxes', 'whiskers', 'fliers', 'medians', 'caps']:
@@ -291,9 +299,10 @@ def quality_metrics():
         plt.setp(box["boxes"], facecolor=colours[count])
         plt.setp(box["fliers"], markeredgecolor=colours[count])
         count += 1
-    plt.xticks([0.5, 0.9, 1.35, 1.75], ['NEAT 20k', 'NEAT 40k', 'HNEAT 20k', 'HNEAT 40k'], fontsize=8)
+    plt.xticks([0.3, 0.85, 1.45, 2], ['NEAT 20k', 'NEAT 40k', 'HNEAT 20k', 'HNEAT 40k'], fontsize=8)
     plt.ylim([0, 1.02]) # Option to scale but it looks dumb
     plt.title("Performance")
+    plt.savefig("Performance.png")
     plt.show()
 
     ## Set up for reliability and precision
@@ -310,11 +319,11 @@ def quality_metrics():
     boxPlotSetUpPrecision = [precisionArrayNEAT, precisionArrayNEAT2, precisionArrayHyperNEAT, precisionArrayHyperNEAT2]
 
     # Plot Reliability
-    colours = [(1, 0, 0, 0.3), (1, 0, 0, 0.3), (0, 1, 0, 0.3), (0, 1, 0, 0.3)]
-    boxes = [(plt.boxplot(boxPlotSetUpReliability[0], positions=[0.5], patch_artist=True)),
-             (plt.boxplot(boxPlotSetUpReliability[1], positions=[0.9], patch_artist=True)),
-             (plt.boxplot(boxPlotSetUpReliability[2], positions=[1.35], patch_artist=True)),
-             (plt.boxplot(boxPlotSetUpReliability[3], positions=[1.75], patch_artist=True))
+    colours = ['tab:orange', 'tab:blue', 'tab:green', 'tab:red']
+    boxes = [(plt.boxplot(boxPlotSetUpReliability[0], positions=[0.3], patch_artist=True)),
+             (plt.boxplot(boxPlotSetUpReliability[1], positions=[0.85], patch_artist=True)),
+             (plt.boxplot(boxPlotSetUpReliability[2], positions=[1.45], patch_artist=True)),
+             (plt.boxplot(boxPlotSetUpReliability[3], positions=[2], patch_artist=True))
              ]
     count = 0
     for box in boxes:
@@ -323,17 +332,18 @@ def quality_metrics():
         plt.setp(box["boxes"], facecolor=colours[count])
         plt.setp(box["fliers"], markeredgecolor=colours[count])
         count += 1
-    plt.xticks([0.5, 0.9, 1.35, 1.75], ['NEAT 20k', 'NEAT 40k', 'HNEAT 20k', 'HNEAT 40k'], fontsize=8)
+    plt.xticks([0.3, 0.85, 1.45, 2], ['NEAT 20k', 'NEAT 40k', 'HNEAT 20k', 'HNEAT 40k'], fontsize=8)
     plt.ylim([0, 1.02]) # Option to scale but it looks dumb
     plt.title("Reliability")
+    plt.savefig("Reliability.png")
     plt.show()
 
     ## Plot precision
-    colours = [(1, 0, 0, 0.3), (1, 0, 0, 0.3), (0, 1, 0, 0.3), (0, 1, 0, 0.3)]
-    boxes = [(plt.boxplot(boxPlotSetUpPrecision[0], positions=[0.5], patch_artist=True)),
-             (plt.boxplot(boxPlotSetUpPrecision[1], positions=[0.9], patch_artist=True)),
-             (plt.boxplot(boxPlotSetUpPrecision[2], positions=[1.35], patch_artist=True)),
-             (plt.boxplot(boxPlotSetUpPrecision[3], positions=[1.75], patch_artist=True))
+    colours = ['tab:orange', 'tab:blue', 'tab:green', 'tab:red']
+    boxes = [(plt.boxplot(boxPlotSetUpPrecision[0], positions=[0.3], patch_artist=True)),
+             (plt.boxplot(boxPlotSetUpPrecision[1], positions=[0.85], patch_artist=True)),
+             (plt.boxplot(boxPlotSetUpPrecision[2], positions=[1.45], patch_artist=True)),
+             (plt.boxplot(boxPlotSetUpPrecision[3], positions=[2], patch_artist=True))
              ]
     count = 0
     for box in boxes:
@@ -342,16 +352,17 @@ def quality_metrics():
         plt.setp(box["boxes"], facecolor=colours[count])
         plt.setp(box["fliers"], markeredgecolor=colours[count])
         count += 1
-    plt.xticks([0.5, 0.9, 1.35, 1.75], ['NEAT 20k', 'NEAT 40k', 'HNEAT 20k', 'HNEAT 40k'], fontsize=8)
+    plt.xticks([0.3, 0.85, 1.45, 2], ['NEAT 20k', 'NEAT 40k', 'HNEAT 20k', 'HNEAT 40k'], fontsize=8)
     plt.ylim([0, 1.02]) # Option to scale but it looks dumb
     plt.title("Precision")
+    plt.savefig("Precision.png")
     plt.show()
 
     ## Setup coverage
     coverageNEAT = np.array([dfMainNEAT[dfMainNEAT.columns[0]].count()])
     coverageNEAT2 = np.array([dfMainNEAT2[dfMainNEAT2.columns[0]].count()])
-    coverageHyperNEAT = np.array([dfMainNEAT[dfMainHyperNEAT.columns[0]].count()])
-    coverageHyperNEAT2 = np.array([dfMainNEAT[dfMainHyperNEAT2.columns[0]].count()])
+    coverageHyperNEAT = np.array([dfMainHyperNEAT[dfMainHyperNEAT.columns[0]].count()])
+    coverageHyperNEAT2 = np.array([dfMainHyperNEAT2[dfMainHyperNEAT2.columns[0]].count()])
     for i in range(1, 5):
         coverageNEAT = np.append(coverageNEAT, dfMainNEAT[dfMainNEAT.columns[i]].count())
         coverageNEAT2 = np.append(coverageNEAT2, dfMainNEAT2[dfMainNEAT2.columns[i]].count())
@@ -361,14 +372,17 @@ def quality_metrics():
     coverageNEAT2 = coverageNEAT2 / 40000
     coverageHyperNEAT = coverageHyperNEAT / 20000
     coverageHyperNEAT2 = coverageHyperNEAT2 / 40000
-    print(coverageNEAT)
+    print(np.mean(coverageNEAT)*100)
+    print(np.mean(coverageNEAT2)*100)
+    print(np.mean(coverageHyperNEAT)*100)
+    print(np.mean(coverageHyperNEAT2)*100)
 
     ## Plot coverage
-    colours = [(1, 0, 0, 0.3), (1, 0, 0, 0.3), (0, 1, 0, 0.3), (0, 1, 0, 0.3)]
-    boxes = [(plt.boxplot(coverageNEAT, positions=[0.5], patch_artist=True)),
-             (plt.boxplot(coverageNEAT2, positions=[0.9], patch_artist=True)),
-             (plt.boxplot(coverageHyperNEAT, positions=[1.35], patch_artist=True)),
-             (plt.boxplot(coverageHyperNEAT2, positions=[1.75], patch_artist=True))
+    colours = ['tab:orange', 'tab:blue', 'tab:green', 'tab:red']
+    boxes = [(plt.boxplot(coverageNEAT, positions=[0.3], patch_artist=True)),
+             (plt.boxplot(coverageNEAT2, positions=[0.85], patch_artist=True)),
+             (plt.boxplot(coverageHyperNEAT, positions=[1.45], patch_artist=True)),
+             (plt.boxplot(coverageHyperNEAT2, positions=[2], patch_artist=True))
              ]
     count = 0
     for box in boxes:
@@ -377,11 +391,12 @@ def quality_metrics():
         plt.setp(box["boxes"], facecolor=colours[count])
         plt.setp(box["fliers"], markeredgecolor=colours[count])
         count += 1
-    plt.xticks([0.5, 0.9, 1.35, 1.75], ['NEAT 20k', 'NEAT 40k', 'HNEAT 20k', 'HNEAT 40k'], fontsize=8)
+    plt.xticks([0.3, 0.85, 1.45, 2], ['NEAT 20k', 'NEAT 40k', 'HNEAT 20k', 'HNEAT 40k'], fontsize=8)
     plt.ylim([0, 1.02])  # Option to scale but it looks dumb
     plt.title("Coverage")
+    plt.savefig("Coverage Map Metric.png")
     plt.show()
 
 
-#progression_metrics()
-quality_metrics()
+progression_metrics()
+#quality_metrics()

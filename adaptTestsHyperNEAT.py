@@ -43,13 +43,25 @@ maps20File = ["mapElitesOutput/HyperNEAT/0_20000archive/archive8011438.dat",
               "mapElitesOutput/HyperNEAT/1_20000archive/archive8011438.dat",
               "mapElitesOutput/HyperNEAT/2_20000archive/archive8001878.dat",
               "mapElitesOutput/HyperNEAT/3_20000archive/archive8001878.dat",
-              "mapElitesOutput/HyperNEAT/4_20000archive/archive8011438.dat"]
+              "mapElitesOutput/HyperNEAT/4_20000archive/archive8011438.dat",
+              "mapElitesOutput/HyperNEAT/5_20000archive/archive8001878.dat",
+              "mapElitesOutput/HyperNEAT/6_20000archive/archive8001878.dat",
+              "mapElitesOutput/HyperNEAT/7_20000archive/archive8001878.dat",
+              "mapElitesOutput/HyperNEAT/8_20000archive/archive8001878.dat",
+              "mapElitesOutput/HyperNEAT/9_20000archive/archive8001878.dat"
+              ]
 
 maps20Genome = ["mapElitesOutput/HyperNEAT/0_20000archive/archive_genome8011438.pkl",
                 "mapElitesOutput/HyperNEAT/1_20000archive/archive_genome8011438.pkl",
                 "mapElitesOutput/HyperNEAT/2_20000archive/archive_genome8001878.pkl",
                 "mapElitesOutput/HyperNEAT/3_20000archive/archive_genome8001878.pkl",
-                "mapElitesOutput/HyperNEAT/4_20000archive/archive_genome8011438.pkl"]
+                "mapElitesOutput/HyperNEAT/4_20000archive/archive_genome8011438.pkl",
+                "mapElitesOutput/HyperNEAT/5_20000archive/archive_genome8001878.pkl",
+                "mapElitesOutput/HyperNEAT/6_20000archive/archive_genome8001878.pkl",
+                "mapElitesOutput/HyperNEAT/7_20000archive/archive_genome8001878.pkl",
+                "mapElitesOutput/HyperNEAT/8_20000archive/archive_genome8001878.pkl",
+                "mapElitesOutput/HyperNEAT/9_20000archive/archive_genome8001878.pkl"
+                ]
 
 maps40File = ["mapElitesOutput/HyperNEAT/0_40000archive/archive8001878.dat",
               "mapElitesOutput/HyperNEAT/1_40000archive/archive8001878.dat",
@@ -63,8 +75,8 @@ maps40Genome = ["mapElitesOutput/HyperNEAT/0_40000archive/archive_genome8001878.
                 "mapElitesOutput/HyperNEAT/3_40000archive/archive_genome8011438.pkl",
                 "mapElitesOutput/HyperNEAT/4_40000archive/archive_genome8001878.pkl"]
 
-mapType = True  # False for 20k maps, True for 40k maps
-map_count = 5
+mapType = False  # False for 20k maps, True for 40k maps
+map_count = 10
 mapsFile = ''
 if mapType == False:
     niches = 20000
