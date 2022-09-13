@@ -11,7 +11,7 @@ stationary = [0.18, 0, 0, 0, 0] * 6
 
 class Controller:
 
-    def __init__(self, params=tripod_gait, crab_angle=0.0, body_height=0.14, period=1.0, velocity=0.1, dt=1 / 240, ann = None, printangles = False, activations = 2):
+    def __init__(self, params=stationary, crab_angle=0.0, body_height=0.14, period=1.0, velocity=0.1, dt=1 / 240, ann = None, printangles = False, activations = 2):
         # link lengths
         self.count = 0
         self.activations = activations

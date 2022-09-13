@@ -1,5 +1,5 @@
 import neat
-from hexapod.controllers.NEATController import Controller, tripod_gait, reshape, stationary
+from hexapod.controllers.NEATController import Controller, reshape, stationary
 from hexapod.simulator import Simulator
 import numpy as np
 import multiprocessing

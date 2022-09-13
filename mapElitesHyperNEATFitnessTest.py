@@ -9,7 +9,7 @@ import os
 import sys
 import visualize as vz
 import shutil
-from hexapod.controllers.hyperNEATController import Controller, tripod_gait, reshape, stationary
+from hexapod.controllers.hyperNEATController import Controller, reshape, stationary
 from hexapod.simulator import Simulator
 from pureples.hyperneat import create_phenotype_network
 from pureples.shared import Substrate, run_hyper
@@ -84,7 +84,7 @@ CONFIG = neat.config.Config(neat.genome.DefaultGenome, neat.reproduction.Default
                             'NEATHex/config-cppn')
 
 # Filename of map to load in
-filename = r"C:\Users\micha\PycharmProjects\Honours Project\mapElitesOutput\HyperNEAT\0_20000archive\archive_genome8011438.pkl"
+filename = "mapElitesOutput/HyperNEAT/0_20000archive/archive_genome8011438.pkl"
 with open(filename, 'rb') as f:
     genomes = pickle.load(f)
 
@@ -103,7 +103,7 @@ CPPN = neat.nn.FeedForwardNetwork.create(test, CONFIG)
 WINNER_NET = create_phenotype_network(CPPN, SUBSTRATE)
 
 # Create and run controller
-controller = Controller(tripod_gait, body_height=0.15, velocity=0.5, crab_angle=-np.pi / 6, ann=WINNER_NET, activations=ACTIVATIONS)
+controller = Controller(stationary, body_height=0.15, velocity=0.5, crab_angle=-np.pi / 6, ann=WINNER_NET, activations=ACTIVATIONS)
 simulator = Simulator(controller, follow=True, visualiser=True, collision_fatal=False, failed_legs=failed_legs)
 
 while True:
