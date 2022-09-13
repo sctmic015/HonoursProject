@@ -1,5 +1,11 @@
 # | Author: Michael Scott
 
+""" Script used to draw All Map Elites Graphs
+
+1) progression_metrics - Generates graphs for Best Performance, Mean Performance and coverage over time
+2) quality_metrics - Generates Map Quality Metrics Boxplots
+
+"""
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
@@ -10,7 +16,7 @@ from io import StringIO
 import webbrowser
 from tempfile import NamedTemporaryFile
 
-
+# Generate progression metrics
 def progression_metrics():
 
     ## Load in Data for NEAT 20k
@@ -52,7 +58,7 @@ def progression_metrics():
     dfMainHyperNEATBestLine['Best HyperNEAT 20k'] = dfMainHyperNEAT['Best HyperNEAT 20k']
     dfMainHyperNEATBestLineAverage = pd.DataFrame(columns=['Average HyperNEAT 20k'])
     dfMainHyperNEATBestLineAverage['Average HyperNEAT 20k'] = dfMainHyperNEAT['Average HyperNEAT 20k']
-    for i in range(1, 5):
+    for i in range(1, 10):
         filename = rf'C:\Users\micha\PycharmProjects\Honours Project\mapElitesOutput\HyperNEAT\{i}_20000\log.dat'
         df = pd.read_csv(filename, header=None, sep='\s', engine='python')
         df.columns = ['Evaluations', 'Niches', 'Best HyperNEAT 20k', 'Average HyperNEAT 20k', 'Median HyperNEAT 20k',
@@ -62,13 +68,13 @@ def progression_metrics():
         dfMainHyperNEATBestLine.insert(i, 'Best HyperNEAT 20k ' + str(i), df['Best HyperNEAT 20k'], True)
         dfMainHyperNEATBestLineAverage.insert(i, 'Average HyperNEAT 20k' + str(i), df['Average HyperNEAT 20k'], True)
         # dfMainNEATBestLine['Best NEAT 20k ' + str(i)] = df['Best NEAT 20k']
-    dfMainHyperNEATBestLine.insert(5, 'Highest HyperNEAT 20k', dfMainHyperNEATBestLine.max(axis=1), True)
-    dfMainHyperNEATBestLine.insert(5, 'Lowest HyperNEAT 20k', dfMainHyperNEATBestLine.min(axis=1), True)
-    dfMainHyperNEATBestLineAverage.insert(5, 'Highest Average HyperNEAT 20k',
+    dfMainHyperNEATBestLine.insert(10, 'Highest HyperNEAT 20k', dfMainHyperNEATBestLine.max(axis=1), True)
+    dfMainHyperNEATBestLine.insert(10, 'Lowest HyperNEAT 20k', dfMainHyperNEATBestLine.min(axis=1), True)
+    dfMainHyperNEATBestLineAverage.insert(10, 'Highest Average HyperNEAT 20k',
                                           dfMainHyperNEATBestLineAverage.max(axis=1), True)
-    dfMainHyperNEATBestLineAverage.insert(5, 'Lowest Average HyperNEAT 20k', dfMainHyperNEATBestLineAverage.min(axis=1),
+    dfMainHyperNEATBestLineAverage.insert(10, 'Lowest Average HyperNEAT 20k', dfMainHyperNEATBestLineAverage.min(axis=1),
                                           True)
-    dfMainHyperNEAT = dfMainHyperNEAT / 5
+    dfMainHyperNEAT = dfMainHyperNEAT / 10
     dfMainHyperNEAT.reset_index()
 
     ## Load in Data for NEAT 40k
@@ -106,7 +112,7 @@ def progression_metrics():
     dfMainHyperNEATBestLine2['Best HyperNEAT 40k'] = dfMainHyperNEAT2['Best HyperNEAT 40k']
     dfMainHyperNEATBestLineAverage2 = pd.DataFrame(columns=['Average HyperNEAT 40k'])
     dfMainHyperNEATBestLineAverage2['Average HyperNEAT 40k'] = dfMainHyperNEAT2['Average HyperNEAT 40k']
-    for i in range(1, 5):
+    for i in range(1, 10):
         filename = rf'C:\Users\micha\PycharmProjects\Honours Project\mapElitesOutput\HyperNEAT\{i}_40000\log.dat'
         df = pd.read_csv(filename, header=None, sep='\s', engine='python')
         df.columns = ['Evaluations', 'Niches', 'Best HyperNEAT 40k', 'Average HyperNEAT 40k', 'Median HyperNEAT 40k', '5th percentile',
@@ -114,11 +120,11 @@ def progression_metrics():
         dfMainHyperNEAT2 = dfMainHyperNEAT2 + df
         dfMainHyperNEATBestLine2.insert(i, 'Best HyperNEAT 40k ' + str(i), df['Best HyperNEAT 40k'], True)
         dfMainHyperNEATBestLineAverage2.insert(i, 'Average HyperNEAT 40k' + str(i), df['Average HyperNEAT 40k'], True)
-    dfMainHyperNEATBestLine2.insert(5, 'Highest HyperNEAT 40k', dfMainHyperNEATBestLine2.max(axis=1), True)
-    dfMainHyperNEATBestLine2.insert(5, 'Lowest HyperNEAT 40k', dfMainHyperNEATBestLine2.min(axis=1), True)
-    dfMainHyperNEATBestLineAverage2.insert(5, 'Highest Average HyperNEAT 40k', dfMainHyperNEATBestLineAverage2.max(axis=1), True)
-    dfMainHyperNEATBestLineAverage2.insert(5, 'Lowest Average HyperNEAT 40k', dfMainHyperNEATBestLineAverage2.min(axis=1), True)
-    dfMainHyperNEAT2 = dfMainHyperNEAT2 / 5
+    dfMainHyperNEATBestLine2.insert(10, 'Highest HyperNEAT 40k', dfMainHyperNEATBestLine2.max(axis=1), True)
+    dfMainHyperNEATBestLine2.insert(10, 'Lowest HyperNEAT 40k', dfMainHyperNEATBestLine2.min(axis=1), True)
+    dfMainHyperNEATBestLineAverage2.insert(10, 'Highest Average HyperNEAT 40k', dfMainHyperNEATBestLineAverage2.max(axis=1), True)
+    dfMainHyperNEATBestLineAverage2.insert(10, 'Lowest Average HyperNEAT 40k', dfMainHyperNEATBestLineAverage2.min(axis=1), True)
+    dfMainHyperNEAT2 = dfMainHyperNEAT2 / 10
     dfMainHyperNEAT2.reset_index()
 
     ## Find highest fitness to normalise graphs
@@ -197,6 +203,7 @@ def progression_metrics():
     plt.savefig("Mean Performance.png")
     plt.show()
 
+    # Plot Coverage
     dfCoverage = pd.DataFrame(columns=['Evaluations', 'Coverage NEAT 20k', 'Coverage NEAT 40k'])
     dfCoverage['Evaluations'] = dfMainNEAT['Evaluations']
     dfCoverage['Coverage NEAT 20k'] = dfMainNEAT['Niches'] / 200
@@ -211,7 +218,7 @@ def progression_metrics():
     plt.savefig('Coverage.png')
     plt.show()
 
-
+# Generate quality metrics
 def quality_metrics():
     plt.rcParams['figure.figsize'] = [4,5]
     plt.rcParams['figure.dpi'] = 100
@@ -222,8 +229,11 @@ def quality_metrics():
         header=None, sep='\s', engine='python')
     dfMainNEAT = pd.DataFrame(columns=['Fitness 0'])
     dfMainNEAT['Fitness 0'] = dfReadIn[dfReadIn.columns[0]]
-    for i in range(1, 5):
-        filename = rf'C:\Users\micha\PycharmProjects\Honours Project\mapElitesOutput\NEAT\{i}_20000archive\archive8011476.dat'
+    for i in range(1, 10):
+        if i <= 4:
+            filename = rf'C:\Users\micha\PycharmProjects\Honours Project\mapElitesOutput\NEAT\{i}_20000archive\archive8011476.dat'
+        else:
+            filename = rf'C:\Users\micha\PycharmProjects\Honours Project\mapElitesOutput\NEAT\{i}_20000archive\archive8001916.dat'
         dfReadIn = pd.read_csv(filename, header=None, sep='\s', engine='python')
         dfMainNEAT.insert(i, 'Fitness ' + str(i), dfReadIn[dfReadIn.columns[0]], True)
 
@@ -235,8 +245,11 @@ def quality_metrics():
         header=None, sep='\s', engine='python')
     dfMainNEAT2 = pd.DataFrame(columns=['Fitness 0'])
     dfMainNEAT2['Fitness 0'] = dfReadIn2[dfReadIn2.columns[0]]
-    for i in range(1, 5):
-        filename = rf'C:\Users\micha\PycharmProjects\Honours Project\mapElitesOutput\NEAT\{i}_40000archive\archive8011476.dat'
+    for i in range(1, 10):
+        if i <= 4:
+            filename = rf'C:\Users\micha\PycharmProjects\Honours Project\mapElitesOutput\NEAT\{i}_40000archive\archive8011476.dat'
+        else:
+            filename = rf'C:\Users\micha\PycharmProjects\Honours Project\mapElitesOutput\NEAT\{i}_40000archive\archive8001916.dat'
         dfReadIn2 = pd.read_csv(filename, header=None, sep='\s', engine='python')
         dfMainNEAT2.insert(i, 'Fitness ' + str(i), dfReadIn2[dfReadIn.columns[0]], True)
 
@@ -248,7 +261,7 @@ def quality_metrics():
         header=None, sep='\s', engine='python')
     dfMainHyperNEAT = pd.DataFrame(columns=['Fitness 0'])
     dfMainHyperNEAT['Fitness 0'] = dfReadIn3[dfReadIn3.columns[0]]
-    for i in range(1, 5):
+    for i in range(1, 10):
         if i == 1 or i == 4:
             filename = rf'C:\Users\micha\PycharmProjects\Honours Project\mapElitesOutput\HyperNEAT\{i}_20000archive\archive8011438.dat'
         else:
@@ -264,7 +277,7 @@ def quality_metrics():
         header=None, sep='\s', engine='python')
     dfMainHyperNEAT2 = pd.DataFrame(columns=['Fitness 0'])
     dfMainHyperNEAT2['Fitness 0'] = dfReadIn4[dfReadIn4.columns[0]]
-    for i in range(1, 5):
+    for i in range(1, 10):
         if i == 3:
             filename = rf'C:\Users\micha\PycharmProjects\Honours Project\mapElitesOutput\HyperNEAT\{i}_40000archive\archive8011438.dat'
         else:
@@ -306,7 +319,7 @@ def quality_metrics():
     plt.show()
 
     ## Set up for reliability and precision
-    column_list = ['Fitness 0', 'Fitness 1', 'Fitness 2', 'Fitness 3', 'Fitness 4']
+    column_list = ['Fitness 0', 'Fitness 1', 'Fitness 2', 'Fitness 3', 'Fitness 4', 'Fitness 5', 'Fitness 6', 'Fitness 7', 'Fitness 8', 'Fitness 9']
     precisionArrayNEAT = np.array(dfMainNEAT[column_list].mean(axis=0) / referenceFitness)
     precisionArrayNEAT2 = np.array(dfMainNEAT2[column_list].mean(axis=0) / referenceFitness)
     precisionArrayHyperNEAT = np.array(dfMainHyperNEAT[column_list].mean(axis=0) / referenceFitness)
@@ -318,7 +331,7 @@ def quality_metrics():
     boxPlotSetUpReliability = [reliabilityArrayNEAT, reliabilityArrayNEAT2, reliabilityArrayHyperNEAT, reliabilityArrayHyperNEAT2]
     boxPlotSetUpPrecision = [precisionArrayNEAT, precisionArrayNEAT2, precisionArrayHyperNEAT, precisionArrayHyperNEAT2]
 
-    # Plot Reliability
+    ## Plot Reliability
     colours = ['tab:orange', 'tab:blue', 'tab:green', 'tab:red']
     boxes = [(plt.boxplot(boxPlotSetUpReliability[0], positions=[0.3], patch_artist=True)),
              (plt.boxplot(boxPlotSetUpReliability[1], positions=[0.85], patch_artist=True)),
@@ -363,7 +376,7 @@ def quality_metrics():
     coverageNEAT2 = np.array([dfMainNEAT2[dfMainNEAT2.columns[0]].count()])
     coverageHyperNEAT = np.array([dfMainHyperNEAT[dfMainHyperNEAT.columns[0]].count()])
     coverageHyperNEAT2 = np.array([dfMainHyperNEAT2[dfMainHyperNEAT2.columns[0]].count()])
-    for i in range(1, 5):
+    for i in range(1, 10):
         coverageNEAT = np.append(coverageNEAT, dfMainNEAT[dfMainNEAT.columns[i]].count())
         coverageNEAT2 = np.append(coverageNEAT2, dfMainNEAT2[dfMainNEAT2.columns[i]].count())
         coverageHyperNEAT = np.append(coverageHyperNEAT, dfMainHyperNEAT[dfMainHyperNEAT.columns[i]].count())
@@ -399,4 +412,4 @@ def quality_metrics():
 
 
 progression_metrics()
-#quality_metrics()
+quality_metrics()

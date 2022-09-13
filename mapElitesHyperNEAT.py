@@ -9,7 +9,6 @@ import os
 import sys
 import visualize as vz
 import shutil
-
 from hexapod.controllers.hyperNEATController import Controller, tripod_gait, reshape, stationary
 from hexapod.simulator import Simulator
 from pureples.hyperneat import create_phenotype_network
@@ -18,6 +17,15 @@ from pureples.shared.visualize import draw_net
 import pymap_elites.map_elites.common as cm
 import pymap_elites.map_elites.cvt as cvt_map_elites
 
+"""
+A script to produce the HyperNEAT maps
+
+The script takes two command line arguments:
+1) The size of the map to be tested
+2) The run/map number
+"""
+
+# Fitness function that returns fitness and behavioural descriptor
 def evaluate_gait(x, duration=5):
     cppn = neat.nn.FeedForwardNetwork.create(x, CONFIG)
     # Create ANN from CPPN and Substrate
@@ -51,6 +59,7 @@ def evaluate_gait(x, duration=5):
     x.fitness = fitness
     return fitness, descriptor
 
+# Setup Substrate
 INPUT_COORDINATES = [(0.2, 0.5), (0.4, 0.5), (0.6, 0.5),
                      (0.2, 0), (0.4, 0), (0.6, 0),
                      (0.2, -0.5), (0.4, -0.5), (0.6, -0.5),
@@ -81,7 +90,7 @@ CONFIG = neat.config.Config(neat.genome.DefaultGenome, neat.reproduction.Default
                             neat.species.DefaultSpeciesSet, neat.stagnation.DefaultStagnation,
                             'NEATHex/config-cppn')
 
-
+# Method to load in initial high performing genomes
 def load_genomes():
     genomes = []
     for i in range(20):
@@ -96,6 +105,7 @@ def load_genomes():
 if __name__ == '__main__':
     mapSize = int(sys.argv[1])
     runNum = (sys.argv[2])
+    # Map Elites paramters
     params = \
         {
             # more of this -> higher-quality CVT
@@ -117,7 +127,7 @@ if __name__ == '__main__':
             "max": 1,
         }
 
-    # Used when starting from seeded genomes
+    # Used when starting from seeded genomes.
     #genomes = load_genomes()
 
     # Used when loading in checkpointed values

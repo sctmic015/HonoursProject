@@ -16,7 +16,11 @@ import pickle
 from pureples.hyperneat import create_phenotype_network
 from pureples.shared import Substrate, run_hyper
 
+"""
+Python Script to collate all stats for all experiments
+"""
 
+# Define HyperNEAT Substrate
 INPUT_COORDINATES = [(0.2, 0.5), (0.4, 0.5), (0.6, 0.5),
                      (0.2, 0), (0.4, 0), (0.6, 0),
                      (0.2, -0.5), (0.4, -0.5), (0.6, -0.5),
@@ -47,14 +51,14 @@ CONFIG = neat.config.Config(neat.genome.DefaultGenome, neat.reproduction.Default
                             neat.species.DefaultSpeciesSet, neat.stagnation.DefaultStagnation,
                             r'C:\Users\micha\PycharmProjects\Honours Project\NEATHex\config-cppn')
 
+# Configure ann using config file
 config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                      neat.DefaultSpeciesSet, neat.DefaultStagnation,
                      r'C:\Users\micha\PycharmProjects\Honours Project\NEATHex\config-feedforward')
 
+# NEAT fitness function
 def evaluate_gaitNEAT(x, duration=5, failed_legs = []):
     net = neat.nn.FeedForwardNetwork.create(x, config)
-    # Reset net
-    print(failed_legs)
     leg_params = np.array(stationary).reshape(6, 5)
     # Set up controller
     try:
@@ -77,19 +81,15 @@ def evaluate_gaitNEAT(x, duration=5, failed_legs = []):
                                posinf=0.0, neginf=0.0)
     # Terminate Simulator
     simulator.terminate()
-    # print(difference)
-    # fitness = difference
     # Assign fitness to genome
     x.fitness = fitness
     return fitness
 
-
+# HyperNEAT Fitness Function
 def evaluate_gaitHyperNEAT(x, duration=5, failed_legs = []):
     cppn = neat.nn.FeedForwardNetwork.create(x, CONFIG)
     # Create ANN from CPPN and Substrate
     net = create_phenotype_network(cppn, SUBSTRATE)
-    # Reset net
-
     leg_params = np.array(stationary).reshape(6, 5)
     try:
         controller = HController(leg_params, body_height=0.15, velocity=0.5, period=1.0, crab_angle=-np.pi / 6,
@@ -111,14 +111,13 @@ def evaluate_gaitHyperNEAT(x, duration=5, failed_legs = []):
                                posinf=0.0, neginf=0.0)
     # Terminate Simulator
     simulator.terminate()
-    # print(difference)
-    # fitness = difference
     # Assign fitness to genome
     x.fitness = fitness
     return fitness
 
-
+# Stats to compare the NEAT and HyperNEAT initial experiments
 def NEATVHyperNEATStats():
+    # Load in all NEAT and HyperNEAT data
     dfMainBest = pd.DataFrame(columns=['Best NEAT 0', 'Best NEAT 1', 'Best NEAT 2', 'Best NEAT 3', 'Best NEAT 4',
                                        'Best NEAT 5', 'Best NEAT 6', 'Best NEAT 7', 'Best NEAT 8', 'Best NEAT 9',
                                        'Best NEAT 10', 'Best NEAT 11', 'Best NEAT 12', 'Best NEAT 13', 'Best NEAT 14',
@@ -145,14 +144,16 @@ def NEATVHyperNEATStats():
         # dfMain['Average NEAT'] = dfMain['Average NEAT'] + df['Average NEAT']
     dfMainBest.reset_index()
 
+    # Perform all p-tests comparing NEAT to HyperNEAT
     for i in range(1999):
         NEATvals = dfMainBest.iloc[i, 0:20]
         HyperNEATvals = dfMainBest.iloc[i, 20:40]
         print(i)
         print(sp.stats.ranksums(NEATvals, HyperNEATvals, 'greater'))
 
-
+# all mapElitesStats
 def mapElitesStats():
+    # Load in data
     dfNEAT20k = pd.read_csv('NEAT20kQualityMetrics.csv')
     dfNEAT40k = pd.read_csv('NEAT40kQualityMetrics.csv')
     dfHyperNEAT20k = pd.read_csv('HyperNEAT20kQualityMetrics.csv')
@@ -164,26 +165,22 @@ def mapElitesStats():
     dfHyperNEAT40kMax = dfHyperNEAT40k.max(axis=0)
 
     dfNEAT20kAverage = dfNEAT20k.mean(axis=0).to_numpy()
-    print(type(dfNEAT20kAverage))
     dfNEAT40kAverage = dfNEAT40k.mean(axis=0).to_numpy()
     dfHyperNEAT20kAverage = dfHyperNEAT20k.mean(axis=0).to_numpy()
     dfHyperNEAT40kAverage = dfHyperNEAT40k.mean(axis=0).to_numpy()
 
-    rng = np.random.default_rng()
-    sample = rng.uniform(0, 20, 300)
-
     ## Rank Sums tests on global reliability
     # NEAT 20k vs 40k
-    print(sp.stats.wilcoxon(dfNEAT20kAverage, dfNEAT40kAverage, alternative='greater'))
+    print(sp.stats.ranksums(dfNEAT20kAverage, dfNEAT40kAverage, alternative='greater'))
     # HyperNEAT 20k vs 40k
-    print(sp.stats.wilcoxon(dfHyperNEAT20kAverage, dfHyperNEAT40kAverage, alternative='greater'))
+    print(sp.stats.ranksums(dfHyperNEAT20kAverage, dfHyperNEAT40kAverage, alternative='greater'))
     # NEAT 20k vs HyperNEAT 20k
-    print(sp.stats.wilcoxon(dfNEAT20kAverage, dfHyperNEAT20kAverage, alternative='greater'))
+    print(sp.stats.ranksums(dfNEAT20kAverage, dfHyperNEAT20kAverage, alternative='greater'))
     # NEAT 40k vs HyperNEAT 40k
-    print(sp.stats.wilcoxon(dfNEAT40kAverage, dfHyperNEAT40kAverage, alternative='greater'))
+    print(sp.stats.ranksums(dfNEAT40kAverage, dfHyperNEAT40kAverage, alternative='greater'))
 
+# All stats for Map Based Bayesian Optimisation
 def MBOAStats():
-    ## Calculate reference gait performance
     # Get NEAT reference Gait
     filename = r'C:\Users\micha\PycharmProjects\Honours Project\mapElitesOutput\NEAT\0_20000archive\archive_genome8011476.pkl'
     with open(filename, 'rb') as f:
@@ -196,6 +193,7 @@ def MBOAStats():
         genomes = pickle.load(f)
     genome2 = genomes[141]
 
+    # Collate all data
     S0 = [[]]
     S1 = [[1], [2], [3], [4], [5], [6]]
     S2 = [[1, 4], [2, 5], [3, 6]]
@@ -246,6 +244,7 @@ def MBOAStats():
         HyperNEAT40SList.append(CurrentHyperNEAT)
 
     compDF = pd.DataFrame(columns=['N20N', 'N20H', 'N40N', 'N40H', 'H20N', 'H20H', 'H40N', 'H40H'])
+    # Perform P tests for all comparisons
     for i in range(1, 5):
         #print("NEAT20k vs NEAT Reference S" + str(i))
         NEAT20S = NEAT20SList[i]
@@ -276,5 +275,5 @@ def MBOAStats():
 
 
 NEATVHyperNEATStats()
-#mapElitesStats()
-#MBOAStats()
+mapElitesStats()
+MBOAStats()

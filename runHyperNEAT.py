@@ -9,19 +9,25 @@ import os
 import sys
 import visualize as vz
 import shutil
-
 from hexapod.controllers.hyperNEATController import Controller, tripod_gait, reshape, stationary
 from hexapod.simulator import Simulator
 from pureples.hyperneat import create_phenotype_network
 from pureples.shared import Substrate, run_hyper
 from pureples.shared.visualize import draw_net
 
+"""
+A script used Run a single HyperNEAT experiment.
+
+Takes two command line arguments.
+1) The runNumber
+2) The number of Generations to run the algorithm for
+"""
+
+# Fitness function
 def evaluate_gait_parallel(genome, config, duration = 5):
     cppn = neat.nn.FeedForwardNetwork.create(genome, config)
     # Create ANN from CPPN and Substrate
     net = create_phenotype_network(cppn, SUBSTRATE)
-    # Reset net
-
     leg_params = np.array(stationary).reshape(6, 5)
     # Set up controller
     try:
@@ -32,7 +38,6 @@ def evaluate_gait_parallel(genome, config, duration = 5):
     # Initialise Simulator
     simulator = Simulator(controller=controller, visualiser=False, collision_fatal=True)
     # Step in simulator
-
     for t in np.arange(0, duration, step=simulator.dt):
         try:
             simulator.step()
@@ -41,13 +46,10 @@ def evaluate_gait_parallel(genome, config, duration = 5):
     fitness = simulator.base_pos()[0]  # distance travelled along x axis
     # Terminate Simulator
     simulator.terminate()
-    # print(difference)
-    #fitness = difference
-    # Assign fitness to genome
     return fitness
 
 
-
+# HyperNEAT Substrate
 INPUT_COORDINATES = [(0.2, 0.5), (0.4, 0.5), (0.6, 0.5),
                      (0.2, 0), (0.4, 0), (0.6, 0),
                      (0.2, -0.5), (0.4, -0.5), (0.6, -0.5),
@@ -80,25 +82,21 @@ CONFIG = neat.config.Config(neat.genome.DefaultGenome, neat.reproduction.Default
 
 def run(gens):
     """
-    Create the population and run the XOR task by providing eval_fitness as the fitness function.
+    Create the population and run the experiment.
     Returns the winning genome and the statistics of the run.
     """
     pop = neat.population.Population(CONFIG)
     stats = neat.statistics.StatisticsReporter()
     pop.add_reporter(stats)
     pop.add_reporter(neat.reporting.StdOutReporter(True))
-
     pe = neat.parallel.ParallelEvaluator(multiprocessing.cpu_count(), evaluate_gait_parallel)
     winner = pop.run(pe.evaluate, gens)
-
     print("done")
-
-
-
     return winner, stats
 
 
 if __name__ == '__main__':
+    # Create directories for all necessary output
     if not os.path.exists("HyperNEATOutput"):
         os.mkdir("HyperNEATOutput")
         if not os.path.exists("HyperNEATOutput/genomeFitness"):
@@ -114,12 +112,10 @@ if __name__ == '__main__':
     numRuns = int(sys.argv[1])
     fileNumber = (sys.argv[2])
     WINNER, STATS = run(numRuns)  # Only relevant to look at the winner.
-    connections = [cg.key for cg in WINNER.connections.values() if cg.enabled]
-    for i in connections:
-        print(i)
     print("This is the winner!!!")
     print(type(WINNER))
     print('\nBest genome:\n{!s}'.format(WINNER))
+    # Collate all necessary stats and information
     STATS.save_genome_fitness(delimiter=',', filename='HyperNEATOutput/genomeFitness/HyperNEATFitnessHistory' + fileNumber + '.csv')
     vz.plot_stats(STATS, ylog=False, view=True, filename='HyperNEATOutput/graphs/HyperNEATAverageFitness' + fileNumber + '.svg')
     vz.plot_species(STATS, view=True, filename='HyperNEATOutput/graphs/HyperNEATSpeciation' + fileNumber + '.svg')
@@ -148,12 +144,9 @@ if __name__ == '__main__':
     draw_net(CPPN, filename="HyperNEATOutput/graphs/hyperNEATCPPN" + fileNumber)
     draw_net(WINNER_NET, filename="HyperNEATOutput/graphs/hyperNEATWINNER" + fileNumber)
 
-
     # Create and run controller
     controller = Controller(stationary, body_height=0.15, velocity=0.5, crab_angle=-1.57, ann=WINNER_NET, activations=ACTIVATIONS)
     simulator = Simulator(controller, follow=True, visualiser=True, collision_fatal=False, failed_legs=[0])
-
-
 
     while True:
         simulator.step()

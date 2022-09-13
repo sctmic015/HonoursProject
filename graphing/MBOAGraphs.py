@@ -11,6 +11,10 @@ import pickle
 from pureples.hyperneat import create_phenotype_network
 from pureples.shared import Substrate, run_hyper
 
+""" Script to generate all graphs for Map Based Bayesian Optimisation Experiments
+"""
+
+# Setup Substrate
 INPUT_COORDINATES = [(0.2, 0.5), (0.4, 0.5), (0.6, 0.5),
                      (0.2, 0), (0.4, 0), (0.6, 0),
                      (0.2, -0.5), (0.4, -0.5), (0.6, -0.5),
@@ -45,9 +49,9 @@ config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                      neat.DefaultSpeciesSet, neat.DefaultStagnation,
                      r'C:\Users\micha\PycharmProjects\Honours Project\NEATHex\config-feedforward')
 
+
 def evaluate_gaitNEAT(x, duration=5, failed_legs = []):
     net = neat.nn.FeedForwardNetwork.create(x, config)
-    # Reset net
     print(failed_legs)
     leg_params = np.array(stationary).reshape(6, 5)
     # Set up controller
@@ -71,8 +75,6 @@ def evaluate_gaitNEAT(x, duration=5, failed_legs = []):
                                posinf=0.0, neginf=0.0)
     # Terminate Simulator
     simulator.terminate()
-    # print(difference)
-    # fitness = difference
     # Assign fitness to genome
     x.fitness = fitness
     return fitness
@@ -82,8 +84,6 @@ def evaluate_gaitHyperNEAT(x, duration=5, failed_legs = []):
     cppn = neat.nn.FeedForwardNetwork.create(x, CONFIG)
     # Create ANN from CPPN and Substrate
     net = create_phenotype_network(cppn, SUBSTRATE)
-    # Reset net
-
     leg_params = np.array(stationary).reshape(6, 5)
     try:
         controller = HController(leg_params, body_height=0.15, velocity=0.5, period=1.0, crab_angle=-np.pi / 6,
@@ -105,13 +105,12 @@ def evaluate_gaitHyperNEAT(x, duration=5, failed_legs = []):
                                posinf=0.0, neginf=0.0)
     # Terminate Simulator
     simulator.terminate()
-    # print(difference)
-    # fitness = difference
     # Assign fitness to genome
     x.fitness = fitness
     return fitness
 
-def adaptive_performance_plots(tripod_mean_dataNEAT, tripod_mean_dataHyperNEAT):
+# Function to draw adaptive performance plots
+def adaptive_performance_plots(mean_dataNEAT, mean_dataHyperNEAT):
     # matplotlib.rcParams.update({
     #     'pgf.texsystem': "pdflatex",
     #     'pdf.fonttype': 42,
@@ -132,6 +131,7 @@ def adaptive_performance_plots(tripod_mean_dataNEAT, tripod_mean_dataHyperNEAT):
     sim_data_HyperNEAT20 = []
     sim_data_HyperNEAT40 = []
 
+    # Load in all Data
     for scenario in range(5):
         data_NEAT20 = list(np.loadtxt(
             rf"C:\Users\micha\PycharmProjects\Honours Project\mapElitesOutput\NEATSim\20000_niches\perfs_{scenario}.dat").flatten())
@@ -146,18 +146,7 @@ def adaptive_performance_plots(tripod_mean_dataNEAT, tripod_mean_dataHyperNEAT):
         sim_data_HyperNEAT20.append(data_HyperNEAT20)
         sim_data_HyperNEAT40.append(data_HyperNEAT40)
 
-    # performance stats. Not required for graph. Should have a reference perhaps
-    # print("performance stats")
-    # for scenario in range(1, 5):
-    #     t_statistic, p_value = stats.ttest_ind(sim_data_NEAT20[scenario] + sim_data_NEAT40[scenario], tripod_data[scenario])
-    #     print(f'S{scenario}:', p_value)
-
-    # map size stats. Also not really needed for graphs
-    print('map size statistics')
-    for scenario in range(4):
-        t_statistic, p_value = stats.ttest_ind(sim_data_NEAT20[scenario], sim_data_NEAT40[scenario])
-        print(f'S{scenario + 1}:', p_value)
-
+    # Setup and draw all boxplots
     ticks = ['None', 'S1', 'S2', 'S3', 'S4']
     box_width = 0.4
     color_NEAT20 = 'tab:orange'
@@ -187,8 +176,8 @@ def adaptive_performance_plots(tripod_mean_dataNEAT, tripod_mean_dataHyperNEAT):
     bpHyperNEAT40 = plt.boxplot(sim_data_HyperNEAT40, positions=positions + 1.25, widths=box_width, showfliers=True,
                                  flierprops=flierprops, patch_artist=True)
 
-    plt.scatter(positions, tripod_mean_dataNEAT, marker='*', color='tab:purple')   # Might use with ref gaits of some sort
-    plt.scatter(positions, tripod_mean_dataHyperNEAT, marker='*', color='tab:pink')
+    plt.scatter(positions, mean_dataNEAT, marker='*', color='tab:purple')   # Might use with ref gaits of some sort
+    plt.scatter(positions, mean_dataHyperNEAT, marker='*', color='tab:pink')
 
     set_box_color(bpNEAT20, color_NEAT20)
     set_box_color(bpNEAT40, color_NEAT40)
@@ -204,6 +193,7 @@ def adaptive_performance_plots(tripod_mean_dataNEAT, tripod_mean_dataHyperNEAT):
     plt.savefig("Adaption Fitness.png")
     plt.show()
 
+# Plot the number of adaptaitons boxplot
 def number_of_adaptations_plot():
     # matplotlib.rcParams.update({
     #     'pgf.texsystem': "pdflatex",
@@ -279,33 +269,36 @@ def number_of_adaptations_plot():
 
     plt.xticks(range(0, len(ticks) * 4, 4), ticks)
     plt.xlim(-4, len(ticks) * 4)
-    plt.ylim(0, 35)
+    plt.ylim(0, 40)
     #plt.tight_layout(pad=0.1)
 
     plt.savefig("adaptation trials.png")
     plt.show()
 
 if __name__ == '__main__':
-    # Calculate NEAT reference Gait
+    # Load in NEAT Reference Gait
     filename = r'C:\Users\micha\PycharmProjects\Honours Project\mapElitesOutput\NEAT\0_20000archive\archive_genome8011476.pkl'
     with open(filename, 'rb') as f:
         genomes = pickle.load(f)
     genome = genomes[225]
 
-    filename = r'C:\Users\micha\PycharmProjects\Honours Project\mapElitesOutput\HyperNEAT\3_20000archive\archive_genome8001878.pkl'
+    # Load in HyperNEAT Reference Gait
+    filename = r'C:\Users\micha\PycharmProjects\Honours Project\mapElitesOutput\HyperNEAT\6_20000archive\archive_genome8001878.pkl'
     with open(filename, 'rb') as f:
         genomes = pickle.load(f)
-    genome2 = genomes[141]
+    genome2 = genomes[16]
 
+    # Damage Scenario's
     S0 = [[]]
     S1 = [[1], [2], [3], [4], [5], [6]]
     S2 = [[1, 4], [2, 5], [3, 6]]
     S3 = [[1, 3], [2, 4], [3, 5], [4, 6], [5, 1], [6, 2]]
     S4 = [[1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 1]]
 
+    # Get mean for NEAT and HyperNEAT reference gaits across damage scenario's
     scenarios = [S0, S1, S2, S3, S4]
-    tripod_mean_NEAT = np.array([])
-    tripod_mean_HyperNEAT = np.array([])
+    mean_NEAT = np.array([])
+    mean_HyperNEAT = np.array([])
     for scenario in scenarios:
         currentMeanNEAT = 0
         currentMeanHyperNEAT = 0
@@ -317,12 +310,12 @@ if __name__ == '__main__':
             currentMeanHyperNEAT += performanceHyperNEAT
             currentCount += 1
         currentMeanNEAT = currentMeanNEAT / currentCount
-        tripod_mean_NEAT = np.append(tripod_mean_NEAT, currentMeanNEAT)
+        mean_NEAT = np.append(mean_NEAT, currentMeanNEAT)
         currentMeanHyperNEAT = currentMeanHyperNEAT / currentCount
-        tripod_mean_HyperNEAT = np.append(tripod_mean_HyperNEAT, currentMeanHyperNEAT)
+        mean_HyperNEAT = np.append(mean_HyperNEAT, currentMeanHyperNEAT)
 
 
-    adaptive_performance_plots(tripod_mean_dataNEAT=tripod_mean_NEAT, tripod_mean_dataHyperNEAT=tripod_mean_HyperNEAT)
+    adaptive_performance_plots(mean_dataNEAT=mean_NEAT, mean_dataHyperNEAT=mean_HyperNEAT)
     number_of_adaptations_plot()
 
 

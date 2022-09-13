@@ -6,11 +6,20 @@ import pickle
 import neat
 import sys
 
+"""
+A script used to run adaptation test for all damage scenario's 
+
+The script takes two command line arguments:
+1) 0 or 1 indicate whether we are running the test for 20k or 40k maps.
+2) An integer [0, 4] indicating which damage scenario we are testing.
+"""
+
+# Configure ann using config file
 config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                      neat.DefaultSpeciesSet, neat.DefaultStagnation,
                      'NEATHex/config-feedforward')
 
-# parameters
+# Maps to be tested
 maps20File = ["mapElitesOutput/NEAT/0_20000archive/archive8011476.dat",
               "mapElitesOutput/NEAT/1_20000archive/archive8011476.dat",
               "mapElitesOutput/NEAT/2_20000archive/archive8011476.dat",
@@ -59,8 +68,9 @@ maps40Genome = ["mapElitesOutput/NEAT/0_40000archive/archive_genome8011476.pkl",
                 "mapElitesOutput/NEAT/9_40000archive/archive_genome8001916.pkl"
                 ]
 
-mapType = True  # False for 20k maps, True for 40k maps
-map_count = 10
+# Define which maps and failure scenario we are testing
+mapType = int(sys.argv[1])
+failure_scenario = int(sys.argv[2])
 mapsFile = ''
 if mapType == False:
     niches = 20000
@@ -70,8 +80,9 @@ else:
     niches = 40000
     mapsFile = maps40File
     mapsGenome = maps40Genome
-failure_scenario = int(sys.argv[1])
+map_count = len(maps20Genome)
 
+# The different damage configurations
 S0 = [[]]
 S1 = [[1], [2], [3], [4], [5], [6]]
 S2 = [[1, 4], [2, 5], [3, 6]]
@@ -81,17 +92,19 @@ S4 = [[1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 1]]
 scenarios = [S0, S1, S2, S3, S4]
 failures = scenarios[failure_scenario]
 
+# Set up empty numpy arrays for the relevant output
 num_its = np.zeros((len(failures), map_count))
 best_indexes = np.zeros((len(failures), map_count))
 best_perfs = np.zeros((len(failures), map_count))
 
+# Iterate through different failures and maps for each scenario
 for failure_index, failed_legs in enumerate(failures):
     print("Failed legs:", failed_legs)
     for map_num in range(0, len(maps20Genome)):
         print("Testing map:", map_num)
 
 
-        # need to redefine the evaluate function each time to include the failed leg
+        # NEAT evaluation function
         def evaluate_gait(x, duration=5):
             net = neat.nn.FeedForwardNetwork.create(x, config)
             # Reset net
@@ -119,27 +132,26 @@ for failure_index, failed_legs in enumerate(failures):
                                        posinf=0.0, neginf=0.0)
             # Terminate Simulator
             simulator.terminate()
-            # print(difference)
-            # fitness = difference
             # Assign fitness to genome
             x.fitness = fitness
             return fitness
 
 
+        # Determine which map to perform Optimisaiton on and open map and pickle file containing the genomes
         mapGenome = mapsGenome[map_num]
         mapFile = mapsFile[map_num]
         with open(mapGenome, 'rb') as f:
             genomes = pickle.load(f)
         num_it, best_index, best_perf, new_map = MBOA(mapFile, genomes, f"./centroids/centroids_{niches}_6.dat",
                                                       evaluate_gait, max_iter=50, print_output=False)
+        # Update relevant output files
         print(num_it)
         num_its[failure_index, map_num - 1] = num_it
         best_indexes[failure_index, map_num - 1] = best_index
         best_perfs[failure_index, map_num - 1] = best_perf
 
-# np.savetxt(f"./experiments/sim/{niches}k_half/trials_{failure_scenario}.dat", num_its, '%d')
-# np.savetxt(f"./experiments/sim/{niches}k_half/perfs_{failure_scenario}.dat", best_perfs)
 
+# Save output
 np.savetxt(f"./mapElitesOutput/NEATSim/{niches}_niches/trials_{failure_scenario}.dat", num_its, '%d')
 np.savetxt(f"./mapElitesOutput/NEATSim/{niches}_niches/perfs_{failure_scenario}.dat", best_perfs)
 np.savetxt(f"./mapElitesOutput/NEATSim/{niches}_niches/indexes_{failure_scenario}.dat", best_indexes)

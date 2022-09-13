@@ -1,5 +1,4 @@
 import sys
-
 from hexapod.controllers.NEATController import Controller, tripod_gait, reshape, stationary
 from hexapod.simulator import Simulator
 import pymap_elites.map_elites.cvt as cvt_map_elites
@@ -9,10 +8,20 @@ import pymap_elites.map_elites.common as cm
 import pickle
 import os
 
+"""
+A script to produce the NEAT maps
+
+The script takes two command line arguments:
+1) The size of the map to be tested
+2) The run/map number
+"""
+
+# Config file used for the NEAT maps
 config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                      neat.DefaultSpeciesSet, neat.DefaultStagnation,
                      'NEATHex/config-feedforward')
 
+# Fitness function
 def evaluate_gait(x, duration=5):
     net = neat.nn.FeedForwardNetwork.create(x, config)
     # Reset net
@@ -45,6 +54,7 @@ def evaluate_gait(x, duration=5):
     x.fitness = fitness
     return fitness, descriptor
 
+# Load in initial high performing genomes
 def load_genomes():
     genomes = []
     for i in range(20):
@@ -59,7 +69,7 @@ def load_genomes():
 if __name__ == '__main__':
     mapSize = int(sys.argv[1])
     runNum = (sys.argv[2])
-    genomes = load_genomes()
+    # Map Elites Parameters
     params = \
         {
             # more of this -> higher-quality CVT
@@ -80,11 +90,15 @@ if __name__ == '__main__':
             "min": 0,
             "max": 1,
         }
+
+    # Load in the high performing genomes
+    genomes = load_genomes()
     if not os.path.exists("mapElitesOutput/NEAT/" + runNum + "_" + str(mapSize)):
         os.mkdir("mapElitesOutput/NEAT/" + runNum + "_" + str(mapSize))
     if not os.path.exists("mapElitesOutput/NEAT/" + runNum + "_" + str(mapSize) + "archive"):
         os.mkdir("mapElitesOutput/NEAT/" + runNum + "_" + str(mapSize) + "archive")
 
+    # Run Map Elites
     archive = cvt_map_elites.compute(6, genomes, evaluate_gait, n_niches=mapSize, max_evals=12e6,
                                      log_file=open('mapElitesOutput/NEAT/' + runNum + "_" + str(mapSize) + '/log.dat', 'w'), archive_file='mapElitesOutput/NEAT/' + runNum + "_" + str(mapSize) + "archive" + '/archive', params=params,
                                      variation_operator=cm.neatMutation)

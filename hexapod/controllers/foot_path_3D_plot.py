@@ -66,6 +66,6 @@ plt.legend()
 
 fig.tight_layout()
 
-plt.savefig('histogram.pdf')
+plt.savefig('NEAT Foot Trajectory.pdf')
 
 plt.show()

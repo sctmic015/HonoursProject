@@ -4,6 +4,11 @@ from copy import copy
 import numpy as np
 import GPy as GPy
 
+"""
+Program Used to conduct the Map-Based Bayesian Optimisation experiments. 
+
+Code taken from https://github.com/chrismailer/mailer_gecco_2021 and adapted to suit our experiments
+"""
 
 # load the CVT voronoi centroids from input archive
 def load_centroids(filename):

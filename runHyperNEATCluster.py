@@ -9,19 +9,27 @@ import os
 import sys
 import visualize as vz
 import shutil
-
 from hexapod.controllers.hyperNEATController import Controller, stationary, reshape
 from hexapod.simulator import Simulator
 from pureples.hyperneat import create_phenotype_network
 from pureples.shared import Substrate, run_hyper
 from pureples.shared.visualize import draw_net
 
+"""
+The same purpose as runHyperNEAT
+
+A for loop repeats the experiment for a certain number of times. 
+Takes 3 command line arguments:
+1) The number of generations to run each experiment for
+2) The start index of the experiments
+3) The end index of the experiments
+"""
+
+# Fitness Function
 def evaluate_gait_parallel(genome, config, duration = 5):
     cppn = neat.nn.FeedForwardNetwork.create(genome, config)
     # Create ANN from CPPN and Substrate
     net = create_phenotype_network(cppn, SUBSTRATE)
-    # Reset net
-
     leg_params = np.array(stationary).reshape(6, 5)
     # Set up controller
     try:
@@ -40,11 +48,11 @@ def evaluate_gait_parallel(genome, config, duration = 5):
     fitness = simulator.base_pos()[0]  # distance travelled along x axis
     # Terminate Simulator
     simulator.terminate()
-    # Assign fitness to genome
+    # Return fitness
     return fitness
 
 
-
+# Define Substrate
 INPUT_COORDINATES = [(0.2, 0.5), (0.4, 0.5), (0.6, 0.5),
                      (0.2, 0), (0.4, 0), (0.6, 0),
                      (0.2, -0.5), (0.4, -0.5), (0.6, -0.5),
@@ -77,7 +85,7 @@ CONFIG = neat.config.Config(neat.genome.DefaultGenome, neat.reproduction.Default
 
 def run(gens):
     """
-    Create the population and run the XOR task by providing eval_fitness as the fitness function.
+    Create the population and run the experiment.
     Returns the winning genome and the statistics of the run.
     """
     pop = neat.population.Population(CONFIG)
@@ -89,9 +97,6 @@ def run(gens):
     winner = pop.run(pe.evaluate, gens)
 
     print("done")
-
-
-
     return winner, stats
 
 

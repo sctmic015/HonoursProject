@@ -35,6 +35,7 @@ def average_fitness():
     dfMain['Best NEAT'] = dfMain['Best NEAT'] / 20
     dfMain['Average NEAT'] = dfMain['Average NEAT'] / 20
     maximum = dfMain['Best NEAT'].max()
+    print(maximum)
     dfMain['Best NEAT'] = dfMain['Best NEAT'] / maximum
     dfMain['Average NEAT'] = dfMain['Average NEAT'] / maximum
     dfMain.reset_index()
