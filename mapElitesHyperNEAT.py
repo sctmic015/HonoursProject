@@ -9,7 +9,7 @@ import os
 import sys
 import visualize as vz
 import shutil
-from hexapod.controllers.hyperNEATController import Controller, tripod_gait, reshape, stationary
+from hexapod.controllers.hyperNEATController import Controller, reshape, stationary
 from hexapod.simulator import Simulator
 from pureples.hyperneat import create_phenotype_network
 from pureples.shared import Substrate, run_hyper

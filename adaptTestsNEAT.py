@@ -1,4 +1,4 @@
-from hexapod.controllers.NEATController import Controller, tripod_gait, reshape, stationary
+from hexapod.controllers.NEATController import Controller, reshape, stationary
 from hexapod.simulator import Simulator
 from adapt.MBOA import MBOA
 import numpy as np
