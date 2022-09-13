@@ -39,3 +39,23 @@ python3 NEATLoad.py runNum
 ``` 
 
 where runNum is an integer between 0 and 19 indicating which of the experiment replicates to load.
+
+3) Run a genome from the NEAT maps
+```
+python3 MapElitesFitnessTest.py
+```
+
+The filepath to the map, genome within the map and damage conditions can be specified within the script. Performances to damage conditions were calculated using MBOA and can be found in mapElitesOutput/NEATSim.
+
+4) Run a genome from the HyperNEAT maps
+```
+python3 MapElitesHyperNEATFitnessTest.py
+```
+
+The filepath to the map, genome within the map and damage conditions can be specified within the script. Performances to damage conditions were calculated using MBOA and can be found in mapElitesOutput/HyperNEATSim.
+
+## Running Experiments
+
+Note: All experiments take a long time to run. Upwards of 24 hours on a 24 core node at the Center of High Performance Computing. 
+
+1) 
