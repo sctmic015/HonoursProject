@@ -1,33 +1,10 @@
 import math
 import sys
-
 import neat
-
 import numpy as np
 
-# radius, offset, step_height, phase, duty_factor
-from hexapod.controllers.anglequee import anglequee
-
-tripod_gait = [0.15, 0, 0.05, 0.5, 0.5,  # leg 1
-               0.15, 0, 0.05, 0.0, 0.5,  # leg 2
-               0.15, 0, 0.05, 0.5, 0.5,  # leg 3
-               0.15, 0, 0.05, 0.0, 0.5,  # leg 4
-               0.15, 0, 0.05, 0.5, 0.5,  # leg 5
-               0.15, 0, 0.05, 0.0, 0.5]  # leg 6
-
-wave_gait = [0.15, 0, 0.05, 0 / 6, 5 / 6,  # leg 1
-             0.15, 0, 0.05, 1 / 6, 5 / 6,  # leg 2
-             0.15, 0, 0.05, 2 / 6, 5 / 6,  # leg 3
-             0.15, 0, 0.05, 3 / 6, 5 / 6,  # leg 4
-             0.15, 0, 0.05, 4 / 6, 5 / 6,  # leg 5
-             0.15, 0, 0.05, 5 / 6, 5 / 6]  # leg 6
-
-quadruped_gait = [0.15, 0, 0.05, 0 / 3, 2 / 3,  # leg 1
-                  0.15, 0, 0.05, 1 / 3, 2 / 3,  # leg 2
-                  0.15, 0, 0.05, 2 / 3, 2 / 3,  # leg 3
-                  0.15, 0, 0.05, 0 / 3, 2 / 3,  # leg 4
-                  0.15, 0, 0.05, 1 / 3, 2 / 3,  # leg 5
-                  0.15, 0, 0.05, 2 / 3, 2 / 3]  # leg 6
+""" The NEAT controller class. Responsible for managing the ANN queries at each time step
+"""
 
 stationary = [0.18, 0, 0, 0, 0] * 6
 
@@ -51,8 +28,6 @@ class Controller:
         self.printangles = printangles
 
         self.array_dim = int(np.around(period / dt))
-        # print("Hi")
-        # print(self.array_dim)
 
         self.positions = np.empty((0, self.array_dim))
         self.velocities = np.empty((0, self.array_dim))
@@ -83,13 +58,17 @@ class Controller:
         self.max = -1000
         self.current_angle = initial_angle
 
+    # Method to query artificial neural network to get the angles for the next time step.
     def joint_angles(self, t):
 
+        # Feed Sin and Cos waves into the network
         sinewave = math.sin(t * 2 * math.pi / 3 * 16) * 2*math.pi
         coswave = math.cos(t * 2 * math.pi / 3 * 16) * 2*math.pi
         input_angles = np.append(self.current_angle, sinewave)
         input_angles = np.append(input_angles, coswave)
+        # Activate Network
         current_angles = self.ann.activate(input_angles)
+        # Scale outputs to the allowed angular range
         for i in range(len(current_angles)):
             if i % 3 == 0:
                 current_angles[i] = (current_angles[i] * 0.91 * 2) - 0.91
@@ -102,28 +81,6 @@ class Controller:
 
         return current_angles
 
-        # sinewave = math.sin(t*2*math.pi)
-        # coswave = math.cos(t*2*math.pi)
-        # input_angles = self.aq.get_moving_average()
-        # input_angles = np.append(self.current_angle, sinewave)
-        # input_angles = np.append(input_angles, coswave)
-        # #for i in range(self.activations):
-        # current_angles = self.ann.activate(input_angles)
-        #
-        # # Current theory is that the for loop makes the program to slow to do NEAT
-        # for i in range(len(current_angles)):
-        #     if i % 3 == 0:
-        #         current_angles[i] = (current_angles[i] * 2) - (2 / 2)
-        #     elif i % 3 == 1:
-        #         current_angles[i] = current_angles[i] * 0.63
-        #     else:
-        #         current_angles[i] = current_angles[i] * 0.7 - 2.095
-        #
-        # self.aq.add(current_angles)
-        # current_angles = self.aq.get_moving_average()
-        # self.current_angle = current_angles
-        #
-        # return current_angles
 
     def joint_speeds(self, t):
         k = int(((t % self.period) / self.period) * self.array_dim)

@@ -54,7 +54,7 @@ class Controller:
 
         initial_angle = self.angles[:, 0]
         self.current_angle = initial_angle
-        self.aq.add(self.current_angle)
+ 
 
     # Method to query artificial neural network to get the angles for the next time step.
     def joint_angles(self, t):
