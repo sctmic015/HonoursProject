@@ -58,4 +58,63 @@ The filepath to the map, genome within the map and damage conditions can be spec
 
 Note: All experiments take a long time to run. Upwards of 24 hours on a 24 core node at the Center of High Performance Computing. 
 
-1) 
+1) Run a NEAT Experiment
+```
+python3 runNEAT.py numGens fileNumber
+```
+
+Where numGens is the number of generations to run the experiment for (fixed pop size of 300) and fileNumber is used for the outputs from the experiment. 
+
+2) Run a HyperNEAT Experiment
+```
+python3 runHyperNEAT.py numGens fileNumber
+```
+
+Where numGens is the number of generations to run the experiment for (fixed pop size of 300) and fileNumber is used for the outputs from the experiment. 
+
+3) Run a MapElitesExperiment using a NEAT encoding.
+```
+python3 mapElitesNEAT.py mapSize runNum
+```
+
+Where mapSize is the map size used in the experiment and runNum is used for the outputs from the experiment.
+
+4) Run a MapElitesExperiment using a HyperNEAT encoding.
+```
+python3 mapElitesHyperNEAT.py mapSize runNum
+```
+
+Where mapSize is the map size used in the experiment and runNum is used for the outputs from the experiment.
+
+5) Run M-BOA for the NEAT maps
+```
+python3 adaptTestsNEAT.py mapType DamageScenario
+```
+
+Where mapType is a 0 or 1 indicate whether we are running the test for 20k or 40k maps.
+Where DamageScenario is ann integer [0, 4] indicating which damage scenario we are testing.
+
+6) Run M-BOA for the HyperNEAT maps
+```
+python3 adaptTestsHyperNEAT.py mapType DamageScenario
+```
+
+Where mapType is a 0 or 1 indicate whether we are running the test for 20k or 40k maps.
+Where DamageScenario is ann integer [0, 4] indicating which damage scenario we are testing.
+
+## Output From Experiments
+
+1) NEATOutput
+
+Contains all output from the NEAT experiments including genomes, graphs and fitness per generation. 
+
+2) HyperNEATOutput
+
+Contains all output from the HyperNEAT experiments including genomes, graphs and fitness per generation.
+
+3) MapElitesOutut
+
+Contains all output from the MapElites and Map Based Bayesian Optimisation Experiments.
+
+NEAT and HyperNEAT contain Map Elites output
+NEATSim and HyperNEATSim contain MBOA output
