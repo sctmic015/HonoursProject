@@ -6,6 +6,8 @@ This repository contains all the code and results for my Honours Project in Evol
 1) The evolution of hexapod gaits using the NEAT and HyperNEAT algorithms
 2) The use of Map Elites when used in conjunction with NEAT and HyperNEAT as encodings. 
 
+The github repository can be found at https://github.com/sctmic015/HonoursProject. This contains all results and output that was too large too submit on Vula.
+
 ## Requirements
 ```shell
 pip install -r requirements.txt
