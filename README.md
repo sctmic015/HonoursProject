@@ -47,7 +47,7 @@ where runNum is an integer between 0 and 19 indicating which of the experiment r
 python3 MapElitesFitnessTest.py mapType mapNumber genomeNumber failedleg1 failedleg2
 ```
 
-Where mapType is either 0 for 20k maps or 1 for 40k maps, mapNumber is an integer between 0 and 9 determing which generated map we draw from, genomeNumber is the number of the genome selected from the map and failedleg1 and failedleg2 are integers between 1 and 6 determinging the failure scenario. 
+Where mapType is either 0 for 20k maps or 1 for 40k maps, mapNumber is an integer between 0 and 9 determing which generated map we draw from, genomeNumber is the number of the genome selected from the map and failedleg1 and failedleg2 are integers between 1 and 6 determining the failure scenario. 
 
 An example of a high performing gait to damage condition 1, 4 (Two failed legs seperated by two functional legs) would be
 ```
@@ -61,7 +61,7 @@ Performances to damage conditions were calculated using MBOA and can be found in
 python3 MapElitesHyperNEATFitnessTest.py mapType mapNumber genomeNumber failedleg1 failedleg2
 ```
 
-Where mapType is either 0 for 20k maps or 1 for 40k maps, mapNumber is an integer between 0 and 9 determing which generated map we draw from, genomeNumber is the number of the genome selected from the map and failedleg1 and failedleg2 are integers between 1 and 6 determinging the failure scenario. 
+Where mapType is either 0 for 20k maps or 1 for 40k maps, mapNumber is an integer between 0 and 9 determing which generated map we draw from, genomeNumber is the number of the genome selected from the map and failedleg1 and failedleg2 are integers between 1 and 6 determining the failure scenario. 
 
 An example of a high performing gait to damage condition 1, 2 (Two adjacent failed legs) would be
 ```
