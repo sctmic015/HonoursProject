@@ -28,7 +28,7 @@ pip install -r requirements.txt
 
 ## Running Pre Computed Experiments
 
-Note: In order for these experiments to run the various output files found at https://github.com/sctmic015/HonoursProject need to be download and in the correct directories.
+Note: In order for these experiments to run the various output files found at https://github.com/sctmic015/HonoursProject need to be downloaded and in the correct directories.
 
 1) Load best genome (gait) from the 20 NEAT experiments
 ```
@@ -109,7 +109,7 @@ python3 adaptTestsNEAT.py mapType DamageScenario
 ```
 
 Where mapType is a 0 or 1 indicate whether we are running the test for 20k or 40k maps.
-Where DamageScenario is ann integer [0, 4] indicating which damage scenario we are testing.
+Where DamageScenario is an integer [0, 4] indicating which damage scenario we are testing.
 
 6) Run M-BOA for the HyperNEAT maps
 ```
@@ -117,7 +117,7 @@ python3 adaptTestsHyperNEAT.py mapType DamageScenario
 ```
 
 Where mapType is a 0 or 1 indicate whether we are running the test for 20k or 40k maps.
-Where DamageScenario is ann integer [0, 4] indicating which damage scenario we are testing.
+Where DamageScenario is an integer [0, 4] indicating which damage scenario we are testing.
 
 ## Output From Experiments
 
@@ -135,6 +135,10 @@ Contains all output from the MapElites and Map Based Bayesian Optimisation Exper
 
 NEAT and HyperNEAT contain Map Elites output
 NEATSim and HyperNEATSim contain MBOA output
+
+4) Graphs and Stats
+
+Contains all graphs and stats collated at the end of the experiments.
 
 ## Acknowledgements
 
