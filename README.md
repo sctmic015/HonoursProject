@@ -24,7 +24,9 @@ pip install -r requirements.txt
 [Hexapod Playlist](https://youtube.com/playlist?list=PLTJmZivqOPVHI3edrhLOUiYNdeAQAcrH2)
 
 
-## Running Pre Computer Experiments
+## Running Pre Computed Experiments
+
+Note: In order for these experiments to run the various output files found at https://github.com/sctmic015/HonoursProject need to be download and in the correct directories.
 
 1) Load best genome (gait) from the 20 NEAT experiments
 ```
