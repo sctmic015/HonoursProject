@@ -135,3 +135,12 @@ Contains all output from the MapElites and Map Based Bayesian Optimisation Exper
 
 NEAT and HyperNEAT contain Map Elites output
 NEATSim and HyperNEATSim contain MBOA output
+
+## Acknowledgements
+
+The work contained in this repository builds upon work contained in the following repositories:
+
+* [Evolving Gaits for Damage Control in a Hexapod Robot ](https://github.com/chrismailer/mailer_gecco_2021)
+* [Pure Python Library for ES-HyperNEAT](https://github.com/ukuleleplayer/pureples)
+* [neat-python](https://github.com/CodeReclaimers/neat-python)
+* [pymap_elites](https://github.com/resibots/pymap_elites)
