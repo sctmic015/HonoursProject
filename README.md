@@ -42,17 +42,30 @@ where runNum is an integer between 0 and 19 indicating which of the experiment r
 
 3) Run a genome from the NEAT maps
 ```
-python3 MapElitesFitnessTest.py
+python3 MapElitesFitnessTest.py mapType mapNumber genomeNumber failedleg1 failedleg2
 ```
 
-The filepath to the map, genome within the map and damage conditions can be specified within the script. Performances to damage conditions were calculated using MBOA and can be found in mapElitesOutput/NEATSim.
+Where mapType is either 0 for 20k maps or 1 for 40k maps, mapNumber is an integer between 0 and 9 determing which generated map we draw from, genomeNumber is the number of the genome selected from the map and failedleg1 and failedleg2 are integers between 1 and 6 determinging the failure scenario. 
+
+An example of a high performing gait to damage condition 1, 4 (Two failed legs seperated by two functional legs) would be
+```
+python3 mapElitesFitnessTest.py 0 2 1592 1 4
+```
+
+Performances to damage conditions were calculated using MBOA and can be found in mapElitesOutput/NEATSim.
 
 4) Run a genome from the HyperNEAT maps
 ```
-python3 MapElitesHyperNEATFitnessTest.py
+python3 MapElitesHyperNEATFitnessTest.py mapType mapNumber genomeNumber failedleg1 failedleg2
 ```
 
-The filepath to the map, genome within the map and damage conditions can be specified within the script. Performances to damage conditions were calculated using MBOA and can be found in mapElitesOutput/HyperNEATSim.
+Where mapType is either 0 for 20k maps or 1 for 40k maps, mapNumber is an integer between 0 and 9 determing which generated map we draw from, genomeNumber is the number of the genome selected from the map and failedleg1 and failedleg2 are integers between 1 and 6 determinging the failure scenario. 
+
+An example of a high performing gait to damage condition 1, 2 (Two adjacent failed legs) would be
+```
+python3 mapElitesHyperNEATFitnessTest.py 0 0 224 1 2
+```
+Performances to damage conditions were calculated using MBOA and can be found in mapElitesOutput/HyperNEATSim.
 
 ## Running Experiments
 

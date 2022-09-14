@@ -6,10 +6,38 @@ import neat
 import pymap_elites.map_elites.common as cm
 import pickle
 import os
+import sys
 
 """
 A script used to test the NEAT Map Elites experiments. 
 """
+
+# Maps to be tested
+maps20Genome = ["mapElitesOutput/NEAT/0_20000archive/archive_genome8011476.pkl",
+                "mapElitesOutput/NEAT/1_20000archive/archive_genome8011476.pkl",
+                "mapElitesOutput/NEAT/2_20000archive/archive_genome8011476.pkl",
+                "mapElitesOutput/NEAT/3_20000archive/archive_genome8011476.pkl",
+                "mapElitesOutput/NEAT/4_20000archive/archive_genome8011476.pkl",
+                "mapElitesOutput/NEAT/5_20000archive/archive_genome8001916.pkl",
+                "mapElitesOutput/NEAT/6_20000archive/archive_genome8001916.pkl",
+                "mapElitesOutput/NEAT/7_20000archive/archive_genome8001916.pkl",
+                "mapElitesOutput/NEAT/8_20000archive/archive_genome8001916.pkl",
+                "mapElitesOutput/NEAT/9_20000archive/archive_genome8001916.pkl"
+                ]
+
+
+maps40Genome = ["mapElitesOutput/NEAT/0_40000archive/archive_genome8011476.pkl",
+                "mapElitesOutput/NEAT/1_40000archive/archive_genome8011476.pkl",
+                "mapElitesOutput/NEAT/2_40000archive/archive_genome8011476.pkl",
+                "mapElitesOutput/NEAT/3_40000archive/archive_genome8011476.pkl",
+                "mapElitesOutput/NEAT/4_40000archive/archive_genome8011476.pkl",
+                "mapElitesOutput/NEAT/5_40000archive/archive_genome8001916.pkl",
+                "mapElitesOutput/NEAT/6_40000archive/archive_genome8001916.pkl",
+                "mapElitesOutput/NEAT/7_40000archive/archive_genome8001916.pkl",
+                "mapElitesOutput/NEAT/8_40000archive/archive_genome8001916.pkl",
+                "mapElitesOutput/NEAT/9_40000archive/archive_genome8001916.pkl"
+                ]
+
 
 # Load config file for ANN
 config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
@@ -47,16 +75,31 @@ def evaluate_gait(x, failed_legs, duration=5):
     # Assign fitness to genome
     return fitness, descriptor
 
-# Name of map to load in
-filename = 'mapElitesOutput/NEAT/0_20000archive/archive_genome8011476.pkl'
+
+# Choose map type, map number, genome number, failure scenario
+mapType = int(sys.argv[1]) # Map type
+mapNumber = int(sys.argv[2]) # Map Number 
+genomeNumber = int(sys.argv[3]) # Genome number
+try:
+    failed1 = int(sys.argv[4]) # Failed leg 1
+except:
+    failed_legs=[]
+try:
+    failed2 = int(sys.argv[5]) # Failed leg 2
+    failed_legs = [failed1, failed2]
+except:
+    failed_legs=[failed1]
+if mapType == 0:
+    filename = maps20Genome[mapNumber]
+else:
+    filename = maps40Genome[mapNumber]
+
+# Map to load in
 with open(filename, 'rb') as f:
     genomes = pickle.load(f)
 
-# Specify failure scenario
-failed_legs = []
-
 # The genome in the map that we want to test
-test = genomes[225]
+test = genomes[genomeNumber]
 # Print fitness and behavioural descriptor of genome
 print(evaluate_gait(test, duration = 5, failed_legs = failed_legs))
 

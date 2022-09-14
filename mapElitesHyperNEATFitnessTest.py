@@ -21,6 +21,30 @@ import pymap_elites.map_elites.cvt as cvt_map_elites
 A script used to test the HyperNEAT Map Elites experiments. 
 """
 
+maps20Genome = ["mapElitesOutput/HyperNEAT/0_20000archive/archive_genome8011438.pkl",
+                "mapElitesOutput/HyperNEAT/1_20000archive/archive_genome8011438.pkl",
+                "mapElitesOutput/HyperNEAT/2_20000archive/archive_genome8001878.pkl",
+                "mapElitesOutput/HyperNEAT/3_20000archive/archive_genome8001878.pkl",
+                "mapElitesOutput/HyperNEAT/4_20000archive/archive_genome8011438.pkl",
+                "mapElitesOutput/HyperNEAT/5_20000archive/archive_genome8001878.pkl",
+                "mapElitesOutput/HyperNEAT/6_20000archive/archive_genome8001878.pkl",
+                "mapElitesOutput/HyperNEAT/7_20000archive/archive_genome8001878.pkl",
+                "mapElitesOutput/HyperNEAT/8_20000archive/archive_genome8001878.pkl",
+                "mapElitesOutput/HyperNEAT/9_20000archive/archive_genome8001878.pkl"
+                ]
+
+maps40Genome = ["mapElitesOutput/HyperNEAT/0_40000archive/archive_genome8001878.pkl",
+                "mapElitesOutput/HyperNEAT/1_40000archive/archive_genome8001878.pkl",
+                "mapElitesOutput/HyperNEAT/2_40000archive/archive_genome8001878.pkl",
+                "mapElitesOutput/HyperNEAT/3_40000archive/archive_genome8011438.pkl",
+                "mapElitesOutput/HyperNEAT/4_40000archive/archive_genome8001878.pkl",
+                "mapElitesOutput/HyperNEAT/5_40000archive/archive_genome8001878.pkl",
+                "mapElitesOutput/HyperNEAT/6_40000archive/archive_genome8001878.pkl",
+                "mapElitesOutput/HyperNEAT/7_40000archive/archive_genome8001878.pkl",
+                "mapElitesOutput/HyperNEAT/8_40000archive/archive_genome8001878.pkl",
+                "mapElitesOutput/HyperNEAT/9_40000archive/archive_genome8001878.pkl"
+                ]
+
 # Fitness function
 def evaluate_gait(x, failed_legs, duration=5):
     cppn = neat.nn.FeedForwardNetwork.create(x, CONFIG)
@@ -83,15 +107,30 @@ CONFIG = neat.config.Config(neat.genome.DefaultGenome, neat.reproduction.Default
                             neat.species.DefaultSpeciesSet, neat.stagnation.DefaultStagnation,
                             'NEATHex/config-cppn')
 
-# Filename of map to load in
-filename = "mapElitesOutput/HyperNEAT/0_20000archive/archive_genome8011438.pkl"
+# Choose map type, map number, genome number, failure scenario
+mapType = int(sys.argv[1]) # Map type
+mapNumber = int(sys.argv[2]) # Map Number 
+genomeNumber = int(sys.argv[3]) # Genome number
+try:
+    failed1 = int(sys.argv[4]) # Failed leg 1
+except:
+    failed_legs=[]
+try:
+    failed2 = int(sys.argv[5]) # Failed leg 2
+    failed_legs = [failed1, failed2]
+except:
+    failed_legs=[failed1]
+if mapType == 0:
+    filename = maps20Genome[mapNumber]
+else:
+    filename = maps40Genome[mapNumber]
+
+# Load in map
 with open(filename, 'rb') as f:
     genomes = pickle.load(f)
 
-# Specify failure scenario
-failed_legs = [1, 2]
 # The genome we want to test
-test = genomes[224]
+test = genomes[genomeNumber]
 # Print fitness of genome
 print(evaluate_gait(test, failed_legs = failed_legs))
 # Setup CPPN
