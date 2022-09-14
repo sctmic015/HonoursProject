@@ -7,6 +7,7 @@ import pymap_elites.map_elites.common as cm
 import pickle
 import os
 import sys
+import visualize as vz
 
 """
 A script used to test the NEAT Map Elites experiments. 
@@ -105,6 +106,7 @@ print(evaluate_gait(test, duration = 5, failed_legs = failed_legs))
 
 # Create neural network from genome
 winner_net = neat.nn.FeedForwardNetwork.create(test, config)
+# vz.draw_net(config, test)
 
 # Create and run controller
 controller = Controller(stationary, body_height=0.15, velocity=0.5, crab_angle=-np.pi / 6, ann=winner_net,

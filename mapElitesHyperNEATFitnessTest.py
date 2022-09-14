@@ -136,7 +136,7 @@ print(evaluate_gait(test, failed_legs = failed_legs))
 # Setup CPPN
 CPPN = neat.nn.FeedForwardNetwork.create(test, CONFIG)
 # Optional Drawing of CPPN
-# vz.draw_net(CONFIG, test)
+#vz.draw_net(CONFIG, test)
 
 # Setup ANN from CPPN and Substrate
 WINNER_NET = create_phenotype_network(CPPN, SUBSTRATE)
