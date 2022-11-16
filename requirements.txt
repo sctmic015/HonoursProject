@@ -1,8 +1,0 @@
-numpy
-pybullet
-matplotlib
-sklearn
-GPy
-scipy
-neat-python
-graphviz
